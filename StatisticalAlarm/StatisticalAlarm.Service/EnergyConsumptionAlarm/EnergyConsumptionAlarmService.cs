@@ -21,7 +21,8 @@ namespace StatisticalAlarm.Service
                                 where A.OrganizationID=B.OrganizationID
                                 and A.KeyId=C.EnergyConsumptionAlarmLogID
                                 and (A.AlarmType='EnergyConsumption'
-                                or A.AlarmType='Power')
+                                or A.AlarmType='Power'
+                                or A.AlarmType='CoalConsumption')
                                 and B.LevelCode like (
 						                                SELECT E.LevelCode
 						                                FROM system_Organization E
