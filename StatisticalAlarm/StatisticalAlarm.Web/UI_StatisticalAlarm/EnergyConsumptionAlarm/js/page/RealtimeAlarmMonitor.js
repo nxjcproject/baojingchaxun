@@ -8,9 +8,9 @@ $(function () {
 function InitDate() {
     var nowDate = new Date();
     var beforeDate = new Date();
-    //nowDate.setDate(nowDate.getDate() - 1);
+    beforeDate.setDate(nowDate.getDate() - 10);
     var nowString = nowDate.getFullYear() + '-' + (nowDate.getMonth() + 1) + '-' + nowDate.getDate() + " " + nowDate.getHours() + ":" + nowDate.getMinutes() + ":" + nowDate.getSeconds();
-    var beforeString = beforeDate.getFullYear() + '-' + (beforeDate.getMonth()) + '-' + beforeDate.getDate() + " 00:00:00";
+    var beforeString = beforeDate.getFullYear() + '-' + (beforeDate.getMonth()+1) + '-' + beforeDate.getDate() + " 00:00:00";
     $('#startDate').datetimebox('setValue', beforeString);
     $('#endDate').datetimebox('setValue', nowString);
 }
@@ -18,7 +18,8 @@ function onOrganisationTreeClick(node) {
     $('#productLineName').textbox('setText', node.text);
     $('#organizationId').val(node.OrganizationId);
         realtimeAlarm();
-        //g_timer = setTimeout("realtimeAlarm()", 300000);
+    //g_timer = setTimeout("realtimeAlarm()", 300000);
+        updateCombobox();
 }
 
 function setTimer() {
@@ -27,7 +28,7 @@ function setTimer() {
 function setHistory() {
     clearTimeout(g_timer);
     $('#gridMain_ReportTemplate').datagrid("loadData", []);
-    $(".queryDate").show();
+    $(".historyTool").show();
 }
 function realtimeAlarm() {
     if (document.getElementsByName("alarmType")[0].checked == false) {
@@ -35,7 +36,7 @@ function realtimeAlarm() {
         return;
     }
     else {
-        $(".queryDate").hide();
+        $(".historyTool").hide();
     }
     var organizationId = $('#organizationId').val();
     $.ajax({
@@ -64,6 +65,7 @@ function loadDataGrid(type, myData) {
                     { field: 'StandardValue', title: '报警上限', width: 100, align: "center" },
                     { field: 'ActualValue', title: '报警实际值', width: 100, align: "center" }
             ]],
+            fit:true,
             toolbar: "#toolbar_ReportTemplate",
             rownumbers: true,
             singleSelect: true,
@@ -77,6 +79,14 @@ function loadDataGrid(type, myData) {
 }
 
 function QueryReportFun() {
+    var myTree = $('#cc').combotree('tree');	// get the tree object
+    var selectedNode = myTree.tree('getSelected');
+    if (selectedNode!=null) {
+        var myVariableId = selectedNode.VariableId;
+    }
+    else {
+        myVariableId = "null";
+    }
     editIndex = undefined;
     var organizationId = $('#organizationId').val();
     var startTime = $('#startDate').datetimebox('getValue');//开始时间
@@ -92,7 +102,7 @@ function QueryReportFun() {
     $.ajax({
         type: "POST",
         url: "EnergyConsumptionAlarm.aspx/GetHistoryAlarm",
-        data: '{organizationId: "' + organizationId + '", startTime: "' + startTime + '", endTime: "' + endTime + '"}',
+        data: '{organizationId: "' + organizationId + '", startTime: "' + startTime + '", endTime: "' + endTime + '", variableId: "' + myVariableId + '"}',
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (msg) {
@@ -106,4 +116,21 @@ function QueryReportFun() {
 function handleError() {
     $('#gridMain_ReportTemplate').datagrid('loadData', []);
     $.messager.alert('失败', '获取数据失败');
+}
+
+
+function updateCombobox() {
+    var organizationId = $('#organizationId').val();
+    $.ajax({
+        type: "POST",
+        url: "EnergyConsumptionAlarm.aspx/GetCombotreeData",
+        data: '{organizationId: "' + organizationId + '"}',
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (msg) {
+            m_MsgData = jQuery.parseJSON(msg.d);
+            $('#cc').combotree('loadData', m_MsgData);
+        }
+        //error: handleError
+    });
 }

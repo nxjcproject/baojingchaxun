@@ -25,7 +25,7 @@ namespace StatisticalAlarm.Web.UI_StatisticalAlarm.EnergyConsumptionAlarm
 #endif
                 this.OrganisationTree_ProductionLine.Organizations = GetDataValidIdGroup("ProductionOrganization");                         //向web用户控件传递数据授权参数
                 this.OrganisationTree_ProductionLine.PageName = "EnergyConsumptionAlarm.aspx";                                     //向web用户控件传递当前调用的页面名称
-                this.OrganisationTree_ProductionLine.LeveDepth = 5;
+                //this.OrganisationTree_ProductionLine.LeveDepth = 5;
             }
         }
         [WebMethod]
@@ -36,10 +36,17 @@ namespace StatisticalAlarm.Web.UI_StatisticalAlarm.EnergyConsumptionAlarm
             return json;
         }
         [WebMethod]
-        public static string GetHistoryAlarm(string organizationId, string startTime, string endTime)
+        public static string GetHistoryAlarm(string organizationId, string startTime, string endTime,string variableId)
         {
-            DataTable table = EnergyConsumptionAlarmService.GetHistoryAlarmData(organizationId, startTime, endTime);
+            DataTable table = EnergyConsumptionAlarmService.GetHistoryAlarmData(organizationId, startTime, endTime,variableId);
             string json = EasyUIJsonParser.DataGridJsonParser.DataTableToJson(table);
+            return json;
+        }
+        [WebMethod]
+        public static string GetCombotreeData(string organizationId)
+        {
+            DataTable table = EnergyConsumptionAlarmService.GetAlarmItem(organizationId);
+            string json= EasyUIJsonParser.TreeGridJsonParser.DataTableToJsonByLevelCode(table, "LevelCode");
             return json;
         }
     }
