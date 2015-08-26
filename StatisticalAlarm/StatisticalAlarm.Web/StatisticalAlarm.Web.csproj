@@ -1581,6 +1581,8 @@
     <Content Include="lib\pllib\themes\jquery.jqplot.min.css" />
     <Content Include="UI_StatisticalAlarm\EnergyConsumptionAlarm\EnergyConsumptionAlarm.aspx" />
     <Content Include="UI_StatisticalAlarm\EnergyConsumptionAlarm\js\page\RealtimeAlarmMonitor.js" />
+    <Content Include="UI_StatisticalAlarm\HaltAlarm\HaltAlarm.aspx" />
+    <Content Include="UI_StatisticalAlarm\HaltAlarm\js\page\RealtimeHaltAlarmMonitor.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -1591,6 +1593,12 @@
     </Compile>
     <Compile Include="UI_StatisticalAlarm\EnergyConsumptionAlarm\EnergyConsumptionAlarm.aspx.designer.cs">
       <DependentUpon>EnergyConsumptionAlarm.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="UI_StatisticalAlarm\HaltAlarm\HaltAlarm.aspx.cs">
+      <DependentUpon>HaltAlarm.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="UI_StatisticalAlarm\HaltAlarm\HaltAlarm.aspx.designer.cs">
+      <DependentUpon>HaltAlarm.aspx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
