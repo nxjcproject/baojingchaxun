@@ -64,6 +64,7 @@ function loadDataGrid(type, myData) {
                     { field: 'HaltTime', title: '时间', width: 150 },
                     { field: 'ReasonText', title: '原因', width: 300 }
             ]],
+            fit:true,
             toolbar: "#toolbar_ReportTemplate",
             rownumbers: true,
             singleSelect: true,
