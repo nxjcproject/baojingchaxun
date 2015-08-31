@@ -23,12 +23,11 @@ namespace StatisticalAlarm.Service.HaltAlarmService
                                          system_TenDaysRealtimeAlarm E
                                     where E.AlarmType='MachineHalt'
                                     and E.OrganizationID=C.OrganizationID
-                                    and A.OrganizationID=C.OrganizationID
                                     and E.KeyId=A.MachineHaltLogID 
                                     and A.MachineHaltLogID=B.KeyID
                                     and A.HaltTime=B.MasterHaltTime
                                     and C.LevelCode like D.LevelCode+'%'                                 
-                                    group by B.MasterHaltTime,A.OrganizationID,C.Name,B.MasterEquipmentName,B.MasterLabel,B.EquipmentName,B.Label,B.ReasonText
+                                    group by B.MasterHaltTime,B.WarmingTime,A.OrganizationID,C.Name,B.MasterEquipmentName,B.MasterLabel,B.EquipmentName,B.Label,B.ReasonText
                                     union all
                                     select A.OrganizationID,B.Name,A.EquipmentName as MasterEquipmentName,A.Label as MasterLabel,'无' as SlaveEquipmentName,
                                     '无' as SlaveLabel,'主机停机' as Type,D.AlarmDateTime as HaltTime,A.ReasonText,A.HaltTime as time
@@ -36,12 +35,10 @@ namespace StatisticalAlarm.Service.HaltAlarmService
                                          (select LevelCode from system_Organization where OrganizationID=@organizationId) C,
                                          system_TenDaysRealtimeAlarm D
                                     where D.AlarmType='MachineHalt'
-                                     and D.OrganizationID=B.OrganizationID
-                                     and A.OrganizationID=B.OrganizationID                                    
-                                     and D.KeyId=A.MachineHaltLogID  
-                                     and D.AlarmDateTime=A.HaltTime                                  
+                                     and D.OrganizationID=B.OrganizationID                                                                     
+                                     and D.KeyId=A.MachineHaltLogID                                   
                                     and B.LevelCode like C.LevelCode+'%'                       
-                                    group by D.AlarmDateTime,A.OrganizationID,B.Name,A.EquipmentName,A.Label,A.ReasonText
+                                    group by A.HaltTime,D.AlarmDateTime,A.OrganizationID,B.Name,A.EquipmentName,A.Label,A.ReasonText
                                      order by HaltTime desc";
            SqlParameter parameter = new SqlParameter("organizationId", organizationId);
            DataTable originalTable = dataFactory.Query(mySql, parameter);
@@ -60,7 +57,7 @@ namespace StatisticalAlarm.Service.HaltAlarmService
                string masterName = dr["MasterEquipmentName"].ToString().Trim();
                string myOrganizationId = dr["OrganizationID"].ToString().Trim();
                string halttime=dr["time"].ToString();
-               DataRow[] slaveRows = originalTable.Select("MasterEquipmentName='" + masterName + "' and SlaveEquipmentName<>'无' and OrganizationID='" + myOrganizationId + "'"+"time='"+halttime+"'");
+               DataRow[] slaveRows = originalTable.Select("MasterEquipmentName='" + masterName + "' and SlaveEquipmentName<>'无' and OrganizationID='" + myOrganizationId + "' and time='"+halttime+"'");
                int slaveLength = slaveRows.Count();
                for (int j = 0; j < slaveLength; j++)
                {

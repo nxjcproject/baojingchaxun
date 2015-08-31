@@ -1596,6 +1596,7 @@
     </Compile>
     <Compile Include="UI_StatisticalAlarm\HaltAlarm\HaltAlarm.aspx.cs">
       <DependentUpon>HaltAlarm.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="UI_StatisticalAlarm\HaltAlarm\HaltAlarm.aspx.designer.cs">
       <DependentUpon>HaltAlarm.aspx</DependentUpon>
@@ -1605,6 +1606,7 @@
     <Content Include="lib\pllib\syntaxhighlighter\LGPL-LICENSE" />
     <Content Include="lib\pllib\syntaxhighlighter\MIT-LICENSE" />
     <None Include="Properties\PublishProfiles\baojingchaxun.pubxml" />
+    <None Include="Properties\PublishProfiles\StatisticalAlarm.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

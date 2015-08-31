@@ -32,7 +32,7 @@ namespace StatisticalAlarm.Web.UI_StatisticalAlarm.HaltAlarm
         public static string GetRealTimeHaltAlarm(string organizationId)
         {
             DataTable table = HaltAlarmService.GetRealTimeHaltAlarmData(organizationId);
-            string json = EasyUIJsonParser.DataGridJsonParser.DataTableToJson(table);
+            string json = EasyUIJsonParser.TreeGridJsonParser.DataTableToJsonByLevelCode(table, "LevelCode");
             return json;
         }
         [WebMethod]
