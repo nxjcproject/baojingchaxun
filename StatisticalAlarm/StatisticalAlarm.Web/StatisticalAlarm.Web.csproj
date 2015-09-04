@@ -1606,6 +1606,7 @@
     <Content Include="lib\pllib\syntaxhighlighter\LGPL-LICENSE" />
     <Content Include="lib\pllib\syntaxhighlighter\MIT-LICENSE" />
     <None Include="Properties\PublishProfiles\baojingchaxun.pubxml" />
+    <None Include="Properties\PublishProfiles\StatisticalAlarm.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

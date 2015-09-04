@@ -69,13 +69,13 @@ function loadDataGrid(type, myData) {
             rownumbers: true,
             singleSelect: true,
             striped: true,
-            data: [],
+            data:[],
             idField:"id",
             treeField: "EquipmentName"
         })
     }
     else {
-        $('#gridMain_ReportTemplate').treegrid("loadData", myData);
+        $('#gridMain_ReportTemplate').treegrid("loadData",myData);
     }
 }
 
