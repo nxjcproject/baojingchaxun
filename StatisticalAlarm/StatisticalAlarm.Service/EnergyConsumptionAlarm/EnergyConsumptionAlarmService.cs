@@ -16,7 +16,7 @@ namespace StatisticalAlarm.Service
         {
             string connectionString = ConnectionStringFactory.NXJCConnectionString;
             ISqlServerDataFactory dataFactory = new SqlServerDataFactory(connectionString);
-            string mySql = @"select top(200) A.AlarmDateTime,B.Name as ProductLineName,C.Name,C.EnergyConsumptionType,C.StandardValue,C.ActualValue
+            string mySql = @"select top(1000) A.AlarmDateTime,B.Name as ProductLineName,C.Name,C.EnergyConsumptionType,C.StandardValue,C.ActualValue
                                 from system_TenDaysRealtimeAlarm A,system_Organization B,shift_EnergyConsumptionAlarmLog C
                                 where A.OrganizationID=B.OrganizationID
                                 and A.KeyId=C.EnergyConsumptionAlarmLogID
@@ -41,7 +41,7 @@ namespace StatisticalAlarm.Service
             List<SqlParameter> parameterList = new List<SqlParameter>();
             if (variableId == "null")
             {
-                mySql = @"select A.StartTime as AlarmDateTime, B.Name as ProductLineName,A.Name,A.EnergyConsumptionType,A.StandardValue,A.ActualValue
+                mySql = @"select top(1000) A.StartTime as AlarmDateTime, B.Name as ProductLineName,A.Name,A.EnergyConsumptionType,A.StandardValue,A.ActualValue
                         from shift_EnergyConsumptionAlarmLog A,system_Organization B
                         where A.OrganizationID=B.OrganizationID
                         and (A.StartTime>=@startTime and A.StartTime<=@endTime)
@@ -56,7 +56,7 @@ namespace StatisticalAlarm.Service
             }
             else
             {
-                mySql = @"select A.StartTime as AlarmDateTime, B.Name as ProductLineName,A.Name,A.EnergyConsumptionType,A.StandardValue,A.ActualValue
+                mySql = @"select top(1000) A.StartTime as AlarmDateTime, B.Name as ProductLineName,A.Name,A.EnergyConsumptionType,A.StandardValue,A.ActualValue
                         from shift_EnergyConsumptionAlarmLog A,system_Organization B
                         where A.OrganizationID=B.OrganizationID
                         and (A.StartTime>=@startTime and A.StartTime<=@endTime)

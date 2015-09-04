@@ -65,7 +65,9 @@ function loadDataGrid(type, myData) {
                     { field: 'StandardValue', title: '报警上限', width: 100, align: "center" },
                     { field: 'ActualValue', title: '报警实际值', width: 100, align: "center" }
             ]],
-            fit:true,
+            fit: true,
+            pagination: true,
+            pageSize:50,
             toolbar: "#toolbar_ReportTemplate",
             rownumbers: true,
             singleSelect: true,
@@ -74,7 +76,7 @@ function loadDataGrid(type, myData) {
         })
     }
     else {
-        $('#gridMain_ReportTemplate').datagrid("loadData", myData);
+        $('#gridMain_ReportTemplate').datagrid({ loadFilter: pagerFilter }).datagrid('loadData', myData["rows"]);
     }
 }
 
@@ -133,4 +135,36 @@ function updateCombobox() {
         }
         //error: handleError
     });
+}
+
+
+//datagrid最下面分页栏使用
+function pagerFilter(data) {
+    if (typeof data.length == 'number' && typeof data.splice == 'function') {	// is array
+        data = {
+            total: data.length,
+            rows: data
+        }
+    }
+    var dg = $(this);
+    var opts = dg.datagrid('options');
+    var pager = dg.datagrid('getPager');
+    pager.pagination({
+        onSelectPage: function (pageNum, pageSize) {
+            opts.pageNumber = pageNum;
+            opts.pageSize = pageSize;
+            pager.pagination('refresh', {
+                pageNumber: pageNum,
+                pageSize: pageSize
+            });
+            dg.datagrid('loadData', data);
+        }
+    });
+    if (!data.originalRows) {
+        data.originalRows = (data.rows);
+    }
+    var start = (opts.pageNumber - 1) * parseInt(opts.pageSize);
+    var end = start + parseInt(opts.pageSize);
+    data.rows = (data.originalRows.slice(start, end));
+    return data;
 }

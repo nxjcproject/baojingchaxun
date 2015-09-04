@@ -8,9 +8,9 @@ $(function () {
 function InitDate() {
     var nowDate = new Date();
     var beforeDate = new Date();
-    //nowDate.setDate(nowDate.getDate() - 1);
+    beforeDate.setDate(nowDate.getDate() - 10);
     var nowString = nowDate.getFullYear() + '-' + (nowDate.getMonth() + 1) + '-' + nowDate.getDate() + " " + nowDate.getHours() + ":" + nowDate.getMinutes() + ":" + nowDate.getSeconds();
-    var beforeString = beforeDate.getFullYear() + '-' + (beforeDate.getMonth()) + '-' + beforeDate.getDate() + " 00:00:00";
+    var beforeString = beforeDate.getFullYear() + '-' + (beforeDate.getMonth() + 1) + '-' + beforeDate.getDate() + " 00:00:00";
     $('#startDate').datetimebox('setValue', beforeString);
     $('#endDate').datetimebox('setValue', nowString);
 }
@@ -64,6 +64,7 @@ function loadDataGrid(type, myData) {
                     { field: 'HaltTime', title: '时间', width: 150 },
                     { field: 'ReasonText', title: '原因', width: 300 }
             ]],
+            fit:true,
             toolbar: "#toolbar_ReportTemplate",
             rownumbers: true,
             singleSelect: true,
