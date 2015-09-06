@@ -48,8 +48,13 @@ function realtimeAlarm() {
         async: false,//同步执行
         success: function (msg) {
             m_MsgData = jQuery.parseJSON(msg.d);
-            loadDataGrid("last", m_MsgData);
-            setTimer();
+            if (m_MsgData.total==0) {
+                alert("没有查询的数据");
+            }
+            else {                
+                loadDataGrid("last", m_MsgData);
+                setTimer();
+            }
         },
         error: setTimer()
     });
@@ -109,7 +114,12 @@ function QueryReportFun() {
         dataType: "json",
         success: function (msg) {
             m_MsgData = jQuery.parseJSON(msg.d);
-            loadDataGrid("last", m_MsgData);
+            if (m_MsgData.total == 0) {
+                alert("没有查询的数据");
+            }
+            else {
+                loadDataGrid("last", m_MsgData);
+            }
         },
         error: handleError
     });

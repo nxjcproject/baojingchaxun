@@ -46,9 +46,16 @@ function realtimeAlarm() {
         dataType: "json",
         async: false,//同步执行
         success: function (msg) {
-            m_MsgData = jQuery.parseJSON(msg.d);
-            loadDataGrid("last", m_MsgData);
-            setTimer();
+            if (msg.d == "[]") {
+                alert("没有查询的数据");
+                return;
+            }
+            else {
+                m_MsgData = jQuery.parseJSON(msg.d);
+               loadDataGrid("last", m_MsgData);
+                setTimer();
+            }
+           
         },
         error: setTimer()
     });
@@ -98,9 +105,14 @@ function QueryReportFun() {
         data: '{organizationId: "' + organizationId + '", startTime: "' + startTime + '", endTime: "' + endTime + '"}',
         contentType: "application/json; charset=utf-8",
         dataType: "json",
-        success: function (msg) {
-            m_MsgData = jQuery.parseJSON(msg.d);
-            loadDataGrid("last", m_MsgData);
+        success: function (msg) {  
+            if (msg.d == "[]") {
+                alert("没有查询的数据");
+            }
+            else {
+                m_MsgData = jQuery.parseJSON(msg.d);
+                loadDataGrid("last", m_MsgData);
+            }                         
         },
         error: handleError
     });
