@@ -49,7 +49,7 @@ function realtimeAlarm() {
         success: function (msg) {
             m_MsgData = jQuery.parseJSON(msg.d);
             if (m_MsgData.total==0) {
-                alert("没有查询的数据");
+                $.messager.alert('警告', '没有查询的数据');
             }
             else {                
                 loadDataGrid("last", m_MsgData);

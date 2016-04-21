@@ -42,5 +42,21 @@ namespace StatisticalAlarm.Web.UI_StatisticalAlarm.HaltAlarm
             string json = EasyUIJsonParser.TreeGridJsonParser.DataTableToJsonByLevelCode(table, "LevelCode");
             return json;
         }
+        [WebMethod]
+        public static string GetMainMachineList(string organizationId)
+        {
+            DataTable table = HaltAlarmService.GetMainMachineListTable(organizationId);
+            string[] columns={"VariableName","VariableDescription","OrganizationID"};
+            string json = EasyUIJsonParser.DataGridJsonParser.DataTableToJson(table,columns);
+            return json;       
+        }
+            [WebMethod]
+        public static string GetHistoryHaltAlarmbyMainMachine(string organizationId,string variableId, string startTime, string endTime)
+        {
+            DataTable table = HaltAlarmService.GetHistoryHaltAlarmDatabyMainMachine(organizationId,variableId,startTime, endTime);
+            string json = EasyUIJsonParser.TreeGridJsonParser.DataTableToJsonByLevelCode(table, "LevelCode");
+            return json;
+        
+        }
     }
 }

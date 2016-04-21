@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="EnergyConsumptionAlarm\EnergyConsumptionAlarmService.cs" />
     <Compile Include="HaltAlarmService\HaltAlarmService.cs" />
+    <Compile Include="MachineRunService\MachineRunState.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

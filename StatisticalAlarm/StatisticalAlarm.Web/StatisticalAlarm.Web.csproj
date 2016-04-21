@@ -1583,6 +1583,8 @@
     <Content Include="UI_StatisticalAlarm\EnergyConsumptionAlarm\js\page\RealtimeAlarmMonitor.js" />
     <Content Include="UI_StatisticalAlarm\HaltAlarm\HaltAlarm.aspx" />
     <Content Include="UI_StatisticalAlarm\HaltAlarm\js\page\RealtimeHaltAlarmMonitor.js" />
+    <Content Include="UI_StatisticalAlarm\MachineRun\js\MachineRunState.js" />
+    <Content Include="UI_StatisticalAlarm\MachineRun\MachineRunState.aspx" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -1601,11 +1603,19 @@
     <Compile Include="UI_StatisticalAlarm\HaltAlarm\HaltAlarm.aspx.designer.cs">
       <DependentUpon>HaltAlarm.aspx</DependentUpon>
     </Compile>
+    <Compile Include="UI_StatisticalAlarm\MachineRun\MachineRunState.aspx.cs">
+      <DependentUpon>MachineRunState.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UI_StatisticalAlarm\MachineRun\MachineRunState.aspx.designer.cs">
+      <DependentUpon>MachineRunState.aspx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="lib\pllib\syntaxhighlighter\LGPL-LICENSE" />
     <Content Include="lib\pllib\syntaxhighlighter\MIT-LICENSE" />
     <None Include="Properties\PublishProfiles\baojingchaxun.pubxml" />
+    <None Include="Properties\PublishProfiles\Release.pubxml" />
     <None Include="Properties\PublishProfiles\StatisticalAlarm.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -1641,7 +1651,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>0</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:32070/</IISUrl>
+          <IISUrl>http://localhost:65149/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
