@@ -8,17 +8,23 @@ $(function () {
 function InitDate() {
     var nowDate = new Date();
     var beforeDate = new Date();
-    beforeDate.setDate(nowDate.getDate() - 10);
+    beforeDate.setDate(nowDate.getDate() - 5);
     var nowString = nowDate.getFullYear() + '-' + (nowDate.getMonth() + 1) + '-' + nowDate.getDate() + " " + nowDate.getHours() + ":" + nowDate.getMinutes() + ":" + nowDate.getSeconds();
     var beforeString = beforeDate.getFullYear() + '-' + (beforeDate.getMonth() + 1) + '-' + beforeDate.getDate() + " 00:00:00";
     $('#startDate').datetimebox('setValue', beforeString);
     $('#endDate').datetimebox('setValue', nowString);
 }
 var organizationID = "";
+var MainMachine = "";
 function onOrganisationTreeClick(node) {
     $('#productLineName').textbox('setText', node.text);
     $('#organizationId').val(node.OrganizationId);
     organizationID = node.OrganizationId;
+    $('#productLine').combobox('setValue', "");
+    $('#productLine').combobox('setText', "");
+    $('#MainMachineName').combobox('setValue', "");
+    $('#MainMachineName').combobox('setText', "");
+    MainMachine = "";
     LoadProductionLine(node.OrganizationId);
 
     //g_timer = setTimeout("realtimeAlarm()", 300000);
@@ -39,13 +45,16 @@ function LoadProductionLine(OrganizationId) {
                     textField: 'Name',
                     onSelect: function (param) {
                         organizationID = param.OrganizationID;
+                        $('#MainMachineName').combobox('setValue', "");
+                        $('#MainMachineName').combobox('setText', "");
+                        MainMachine = "";
                      LoadMainMachine(param.OrganizationID);
                     }
                 });        
         }     
     });
 }
-var MainMachine = "";
+
 function LoadMainMachine(mOrganizationId) {
     $.ajax({
         type: "POST",

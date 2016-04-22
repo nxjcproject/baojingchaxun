@@ -19,12 +19,13 @@ namespace StatisticalAlarm.Web.UI_StatisticalAlarm.MachineRun
             {
 #if DEBUG
                 ////////////////////调试用,自定义的数据授权
-                List<string> m_DataValidIdItems = new List<string>() { "zc_nxjc_byc_byf" };
+
+                List<string> m_DataValidIdItems = new List<string>() { "zc_nxjc_byc_byf", "zc_nxjc_qtx","zc_nxjc_tsc_tsf" };
                 AddDataValidIdGroup("ProductionOrganization", m_DataValidIdItems);
 #elif RELEASE
 #endif
                 this.OrganisationTree_ProductionLine.Organizations = GetDataValidIdGroup("ProductionOrganization");                         //向web用户控件传递数据授权参数
-                this.OrganisationTree_ProductionLine.PageName = "HaltAlarm.aspx";   //向web用户控件传递当前调用的页面名称
+                this.OrganisationTree_ProductionLine.PageName = "MachineRunState.aspx";   //向web用户控件传递当前调用的页面名称
                 this.OrganisationTree_ProductionLine.LeveDepth = 5;
             }
         }
@@ -36,13 +37,6 @@ namespace StatisticalAlarm.Web.UI_StatisticalAlarm.MachineRun
             string json = EasyUIJsonParser.TreeGridJsonParser.DataTableToJsonByLevelCode(table, "LevelCode");
             return json;
         }
-        //[WebMethod]
-        //public static string GetHistoryHaltAlarm(string organizationID, string startTime, string endTime)
-        //{
-        //    DataTable table = StatisticalAlarm.Service.MachineRunService.MachineRunState.TempHistoryHaltAlarmData(organizationID, startTime, endTime);
-        //    string json = EasyUIJsonParser.TreeGridJsonParser.DataTableToJsonByLevelCode(table, "LevelCode");
-        //    return json;
-        //}
         [WebMethod]
         public static string GetHistoryHaltAlarmB(string organizationID, string mainMachine, string startTime, string endTime)
         {
