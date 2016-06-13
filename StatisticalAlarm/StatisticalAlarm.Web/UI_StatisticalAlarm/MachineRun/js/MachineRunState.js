@@ -1,6 +1,4 @@
-﻿var g_timer;
-
-$(function () {
+﻿$(function () {
     InitDate();
     loadDataGrid("first");
 });
@@ -14,68 +12,6 @@ function InitDate() {
     $('#startDate').datetimebox('setValue', beforeString);
     $('#endDate').datetimebox('setValue', nowString);
 }
-var organizationID = "";
-var MainMachine = "";
-function onOrganisationTreeClick(node) {
-    $('#productLineName').textbox('setText', node.text);
-    $('#organizationId').val(node.OrganizationId);
-    organizationID = node.OrganizationId;
-    $('#productLine').combobox('setValue', "");
-    $('#productLine').combobox('setText', "");
-    $('#MainMachineName').combobox('setValue', "");
-    $('#MainMachineName').combobox('setText', "");
-    MainMachine = "";
-    LoadProductionLine(node.OrganizationId);
-
-    //g_timer = setTimeout("realtimeAlarm()", 300000);
-}
-function LoadProductionLine(OrganizationId) {
-    
-    $.ajax({
-        type: "POST",
-        url: "MachineRunState.aspx/GetProductionLine",
-        data: '{organizationId: "' + OrganizationId + '"}',
-        contentType: "application/json; charset=utf-8",
-        dataType: "json",
-        success: function (msg) {
-            m_MsgData = jQuery.parseJSON(msg.d);
-                $('#productLine').combobox({
-                    data: m_MsgData.rows,
-                    valueField: 'OrganizationID',
-                    textField: 'Name',
-                    onSelect: function (param) {
-                        organizationID = param.OrganizationID;
-                        $('#MainMachineName').combobox('setValue', "");
-                        $('#MainMachineName').combobox('setText', "");
-                        MainMachine = "";
-                     LoadMainMachine(param.OrganizationID);
-                    }
-                });        
-        }     
-    });
-}
-
-function LoadMainMachine(mOrganizationId) {
-    $.ajax({
-        type: "POST",
-        url: "MachineRunState.aspx/GetMainMachineList",
-        data: '{organizationId: "' + mOrganizationId + '"}',
-        contentType: "application/json; charset=utf-8",
-        dataType: "json",
-        success: function (msg) {
-            m_MsgData = jQuery.parseJSON(msg.d);
-                $('#MainMachineName').combobox({
-                    data: m_MsgData.rows,
-                    valueField: 'VariableName',
-                    textField: 'VariableDescription',
-                    onSelect: function (param) {
-                        MainMachine = param.VariableName;
-                    }
-                });         
-        }
-    });
-
-};
 function loadDataGrid(type, myData) {
     if (type == "first") {
         $('#gridMain_ReportTemplate').treegrid({
@@ -96,13 +32,83 @@ function loadDataGrid(type, myData) {
             data: [],
             idField: 'LevelCode',
             treeField: 'EquipmentName',
-        });      
+        });
     }
     else {
         $('#gridMain_ReportTemplate').treegrid({ data: [] });
         $('#gridMain_ReportTemplate').treegrid('loadData', myData);
         $('#gridMain_ReportTemplate').treegrid("collapseAll");
     }
+}
+var organizationID = "";
+var mainMachine = "";
+function onOrganisationTreeClick(node) {
+    $('#productLineName').textbox('setText', node.text);
+    $('#organizationId').val(node.OrganizationId);
+    organizationID = node.OrganizationId;
+    $('#MainMachineName').combobox('setValue', "");
+    $('#MainMachineName').combobox('setText', "");
+    $('#MainMachine').combobox('setValue', "");
+    $('#MainMachine').combobox('setText', "");
+    mainMachine = "";
+    LoadMainMachineClassList(organizationID);
+
+    //g_timer = setTimeout("realtimeAlarm()", 300000);
+}
+var variableName = "";
+function LoadMainMachineClassList(OrganizationId) {
+    $.ajax({
+        type: "POST",
+        url: "MachineRunState.aspx/MainMachineClassList",
+        data: '{organizationId: "' + OrganizationId + '"}',
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (msg) {
+            m_MsgData = jQuery.parseJSON(msg.d);
+            $('#MainMachineName').combobox({
+                data: m_MsgData.rows,
+                valueField: 'VariableDescription',
+                textField: 'VariableDescription',
+                onSelect: function (param) {
+                    variableName = param.VariableDescription;
+                    $('#MainMachine').combobox('setValue', "");
+                    $('#MainMachine').combobox('setText', "");
+                    //MainMachine = "";
+                    LoadMainMachineList(OrganizationId, variableName);
+                }
+            });
+        }
+    });
+}
+var mOrganizationID = "";
+function LoadMainMachineList(OrganizationID, VariableName) {
+    $.ajax({
+        type: "POST",
+        url: "MachineRunState.aspx/MainMachineList",
+        data: '{organizationId: "' + OrganizationID + '",variableName:"' + VariableName + '"}',
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (msg) {
+            m_MsgData = jQuery.parseJSON(msg.d);
+            $('#MainMachine').combobox({
+                data: m_MsgData.rows,
+                valueField: 'VariableName',
+                textField: 'MainMachine',
+                onSelect: function (param) {
+                    $('#MainMachine').combobox('setValue', "");
+                    $('#MainMachine').combobox('setText', "");
+                    mOrganizationID = "";
+                    mainMachine = "";
+                    mOrganizationID = param.OrganizationID;
+                    variableName = param.VariableName;
+                    mainMachine = param.MainMachine;
+                    $('#MainMachine').combobox('setValue', variableName);
+                    $('#MainMachine').combobox('setText', mainMachine);
+                 //   LoadMainMachineList(OrganizationId, variableName);
+                }
+            });
+        }
+    });
 }
 function QueryReportFun() {
     editIndex = undefined;
@@ -116,25 +122,10 @@ function QueryReportFun() {
         $.messager.alert('警告', '结束时间不能大于开始时间！');
         return;
     }
-    var queryUrl = "";
-    var queryData = "";
-    
-    
-    if ($('#MainMachineName').combobox('getText') == "") {
-        MainMachine = "";
-    }
-    if (MainMachine == "") {
-        queryUrl = "MachineRunState.aspx/GetHistoryHaltAlarmA";
-        queryData= '{organizationId: "' + organizationID + '", startTime: "' + startTime + '", endTime: "' + endTime + '"}'; 
-    }
-    else if (MainMachine != "") {
-        queryUrl = "MachineRunState.aspx/GetHistoryHaltAlarmB";
-        queryData = '{organizationID: "' + organizationID + '", mainMachine: "' + MainMachine + '", startTime: "' + startTime + '", endTime: "' + endTime + '"}';
-    }
     $.ajax({
         type: "POST",
-        url: queryUrl,
-        data: queryData,
+        url: "MachineRunState.aspx/GetHistoryHaltAlarm",
+        data: '{organizationID: "' + mOrganizationID + '", mainMachine: "' + variableName + '", startTime: "' + startTime + '", endTime: "' + endTime + '"}',
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (msg) {

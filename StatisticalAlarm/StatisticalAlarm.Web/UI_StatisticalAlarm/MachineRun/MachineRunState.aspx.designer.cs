@@ -10,7 +10,7 @@
 namespace StatisticalAlarm.Web.UI_StatisticalAlarm.MachineRun {
     
     
-    public partial class MachineRunState {
+    public partial class MachineRunState1 {
         
         /// <summary>
         /// OrganisationTree_ProductionLine 控件。

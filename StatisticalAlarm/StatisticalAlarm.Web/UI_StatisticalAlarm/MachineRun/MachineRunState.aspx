@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="MachineRunState.aspx.cs" Inherits="StatisticalAlarm.Web.UI_StatisticalAlarm.MachineRun.MachineRunState" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="MachineRunState.aspx.cs" Inherits="StatisticalAlarm.Web.UI_StatisticalAlarm.MachineRun.MachineRunState1" %>
 
 <%@ Register Src="/UI_WebUserControls/OrganizationSelector/OrganisationTree.ascx" TagName="OrganisationTree" TagPrefix="uc1" %>
 
@@ -7,7 +7,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>主机运行</title>
+     <title>主机运行</title>
     <link rel="stylesheet" type="text/css" href="/lib/ealib/themes/gray/easyui.css" />
     <link rel="stylesheet" type="text/css" href="/lib/ealib/themes/icon.css" />
     <link rel="stylesheet" type="text/css" href="/lib/extlib/themes/syExtIcon.css" />
@@ -51,11 +51,11 @@
                         <table>
                             <tr>
                                 <td style="width:50px"> 生产线：</td>
-                                <td><input id="productLineName" class="easyui-textbox" style="width: 90px;" readonly="readonly" /><input id="organizationId" readonly="readonly" style="display: none;" /></td>                               
-                                <td style="width:40px"> 产线：</td> 
-                                <td><input id="productLine" class="easyui-combobox" data-options="panelHeight: 'auto'"style="width:90px;" /></td>                                                             
+                                <td><input id="productLineName" class="easyui-textbox" style="width: 90px;" readonly="readonly" /><input id="organizationId" readonly="readonly" style="display: none;" /></td>                                                                                          
                                 <td style="width:80px"> 主设备名称：</td> 
-                                <td><input id="MainMachineName" class="easyui-combobox"data-options="panelHeight: 'auto'" style="width: 140px;"/></td>                               
+                                <td><input id="MainMachineName" class="easyui-combobox"data-options="panelHeight: 'auto'" style="width: 140px;"/></td>      
+                                <td style="width:50px"> 主设备：</td> 
+                                <td><input id="MainMachine" class="easyui-combobox" data-options="panelHeight: 'auto'"style="width:240px;" /></td>                           
                            </tr>
                        </table>
                        
@@ -82,3 +82,4 @@
     </form>
 </body>
 </html>
+
