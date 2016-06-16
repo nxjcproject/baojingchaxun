@@ -30,25 +30,23 @@ namespace StatisticalAlarm.Web.UI_StatisticalAlarm.MachineRun
         }
         [WebMethod]
 
-        public static string MainMachineClassList(string organizationId) 
+        public static string MainMachineClassList(string mOrganizationID) 
         {
-            DataTable table = StatisticalAlarm.Service.MachineRunService.MachineRunState.GetMainMachineClassList(organizationId);
+            DataTable table = StatisticalAlarm.Service.MachineRunService.MachineRunState.GetMainMachineClassList(mOrganizationID);
             string json = EasyUIJsonParser.DataGridJsonParser.DataTableToJson(table);
             return json;      
             //select VariableDescription,VariableName from [dbo].[system_MasterMachineDescription]  where OrganizationID like 'zc_nxjc_byc_byf%' order by OrganizationID
         }
         [WebMethod]
 
-        public static string MainMachineList(string organizationId, string variableName)
+        public static string MainMachineList(string mEquipmentId)
         {
-            DataTable table = StatisticalAlarm.Service.MachineRunService.MachineRunState.GetMainMachineList(organizationId,variableName);
+            DataTable table = StatisticalAlarm.Service.MachineRunService.MachineRunState.GetMainMachineList(mEquipmentId);
             string json = EasyUIJsonParser.DataGridJsonParser.DataTableToJson(table);
             return json;
             //select VariableDescription,VariableName from [dbo].[system_MasterMachineDescription]  where OrganizationID like 'zc_nxjc_byc_byf%' order by OrganizationID
         }
-
         [WebMethod]
-
         public static string GetHistoryHaltAlarm(string organizationID, string mainMachine, string startTime, string endTime)
         {
             //DataTable table = StatisticalAlarm.Service.MachineRunService.MachineRunState.GetHistoryHaltAlarmData(organizationId, startTime, endTime);
@@ -56,6 +54,5 @@ namespace StatisticalAlarm.Web.UI_StatisticalAlarm.MachineRun
             string json = EasyUIJsonParser.DataGridJsonParser.DataTableToJson(table);
             return json;
         }
-
     }
 }

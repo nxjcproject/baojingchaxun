@@ -11,26 +11,46 @@ namespace StatisticalAlarm.Service.MachineRunService
 {
     public class MachineRunState
     {
-        public static DataTable GetMainMachineClassList(string organizationId)
+        public static DataTable GetMainMachineClassList(string mOrganizationID)
         {
             string connectionString = ConnectionStringFactory.NXJCConnectionString;
             ISqlServerDataFactory dataFactory = new SqlServerDataFactory(connectionString);
-            string mySql = @"select distinct(VariableDescription) from [dbo].[system_MasterMachineDescription]  
-                          where OrganizationID like @organizationId+'%' order by VariableDescription ";
-            SqlParameter parameters = new SqlParameter("@organizationId", organizationId);
-            DataTable Table = dataFactory.Query(mySql, parameters);
+            string mySql = @" SELECT A.[EquipmentId]
+                                ,A.[EquipmentName]
+                                ,A.[EquipmentCommonId]
+	                            ,B.[OrganizationID]
+                                ,B.[VariableName]
+                                ,B.[VariableDescription]
+                                FROM [NXJC].[dbo].[equipment_EquipmentDetail] A, [NXJC].[dbo].[system_MasterMachineDescription] B
+	                            where  A.[EquipmentId]=B.[ID] 
+	                              and A.[Enabled]=1
+                                  and A.[OrganizationId]=@mOrganizationID
+	                            order by A.DisplayIndex  ";
+            SqlParameter param = new SqlParameter("@mOrganizationID", mOrganizationID);
+            DataTable Table = dataFactory.Query(mySql, param);
             return Table;
         }
-        public static DataTable GetMainMachineList(string organizationId, string variableName) 
+        public static DataTable GetMainMachineList(string mEquipmentId) 
         {
             string connectionString = ConnectionStringFactory.NXJCConnectionString;
             ISqlServerDataFactory dataFactory = new SqlServerDataFactory(connectionString);
-            string mySql = @"select A.OrganizationID,B.[Name]+A.[VariableDescription] as MainMachine,A.VariableName 
-                                 from [dbo].[system_MasterMachineDescription] A,[dbo].[system_Organization] B
-                             where A.OrganizationID like @organizationId+'%' and A.VariableDescription=@variableName
-                             and A.OrganizationID=B.OrganizationID order by OrganizationID";
-            SqlParameter[] parameters = { new SqlParameter("@organizationId", organizationId), new SqlParameter("@variableName", variableName) };
-            DataTable Table = dataFactory.Query(mySql, parameters);
+            string mySql = @"SELECT [ID]
+                                  ,[OrganizationID]
+                                  ,[VariableID]
+                                  ,[VariableName]
+                                  ,[VariableDescription]
+                                  ,[DataBaseName]
+                                  ,[TableName]
+                                  ,[Record]
+                                  ,[ValidValues]
+                                  ,[Remarks]
+                                  ,[KeyID]
+                                  ,[MachineHaltReason]
+                                  ,[MachineHaltRecord]
+                                  ,[OutputField]
+                              FROM [NXJC].[dbo].[system_MasterMachineDescription]  where ID=@mEquipmentId";
+            SqlParameter param = new SqlParameter("@mEquipmentId", mEquipmentId);
+            DataTable Table = dataFactory.Query(mySql, param);
             return Table;
         }
         public static DataTable GetHistoryHaltAlarmData(string organizationId, string MainMachine, string startTime, string endTime)

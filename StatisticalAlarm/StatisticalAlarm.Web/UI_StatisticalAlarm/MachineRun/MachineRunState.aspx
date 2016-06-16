@@ -42,10 +42,7 @@
                                 <td class="queryDate">                            
                                     结束时间：<input id="endDate" type="text" class="easyui-datetimebox" required="required" style="width: 150px;" />
                                 </td> 
-                                <td style="width:20px"></td>  
-                                <td class="queryDate"><a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true"
-                                    onclick="QueryReportFun();">查询</a>
-                                </td>               
+                                           
                             </tr>
                         </table>
                         <table>
@@ -53,12 +50,13 @@
                                 <td style="width:50px"> 生产线：</td>
                                 <td><input id="productLineName" class="easyui-textbox" style="width: 90px;" readonly="readonly" /><input id="organizationId" readonly="readonly" style="display: none;" /></td>                                                                                          
                                 <td style="width:80px"> 主设备名称：</td> 
-                                <td><input id="MainMachineName" class="easyui-combobox"data-options="panelHeight: 'auto'" style="width: 140px;"/></td>      
-                                <td style="width:50px"> 主设备：</td> 
-                                <td><input id="MainMachine" class="easyui-combobox" data-options="panelHeight: 'auto'"style="width:240px;" /></td>                           
+                                <td><input id="EquipmentName" class="easyui-combobox"data-options="panelHeight: 'auto'" style="width: 120px;"/></td>  
+                                <td style="width:20px"></td>  
+                                <td class="queryDate"><a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true"
+                                    onclick="QueryReportFun();">查询</a>
+                                </td>               
                            </tr>
-                       </table>
-                       
+                       </table>                 
                     </td>
                 </tr>
                 <tr>

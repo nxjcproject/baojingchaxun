@@ -40,7 +40,6 @@
                                     <input type="radio" id="rdoYearly" name="alarmType" value="realtime" checked="checked" onclick="realtimeAlarm()" />实时
                                      <input type="radio" id="rdoMonthly" name="alarmType" value="history" onclick="setHistory()" />历史
                                 </td>
-
                             </tr>
                             <tr>
                                 <td class="queryDate" style="display: none; width: 60px">开始时间：</td>
@@ -62,7 +61,7 @@
                     生产线:
                 </span>
                 <span>
-                    <input id="productLineName" class="easyui-textbox" style="width: 150px;" readonly="true" /><input id="organizationId" readonly="true" style="display: none;" />
+                    <input id="productLineName" class="easyui-textbox" style="width: 150px;" readonly="readonly" /><input id="organizationId" readonly="readonly" style="display: none;" />
                     <input type="radio" id="Radio1" name="alarmType" value="realtime" checked="checked" onclick="realtimeAlarm()" />实时
                     <input type="radio" id="Radio2" name="alarmType" value="history" onclick="setHistory()" />历史
                 </span>
