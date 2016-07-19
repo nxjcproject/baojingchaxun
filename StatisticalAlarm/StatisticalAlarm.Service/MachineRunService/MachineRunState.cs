@@ -18,8 +18,7 @@ namespace StatisticalAlarm.Service.MachineRunService
             string mySql = @" SELECT A.[EquipmentId]
                                 ,A.[EquipmentName]
                                 ,A.[EquipmentCommonId]
-	                            ,B.[OrganizationID]
-                                ,B.[VariableName]
+	                            ,B.[OrganizationID]+','+B.[VariableName] as Variable
                                 ,B.[VariableDescription]
                                 FROM [NXJC].[dbo].[equipment_EquipmentDetail] A, [NXJC].[dbo].[system_MasterMachineDescription] B
 	                            where  A.[EquipmentId]=B.[ID] 

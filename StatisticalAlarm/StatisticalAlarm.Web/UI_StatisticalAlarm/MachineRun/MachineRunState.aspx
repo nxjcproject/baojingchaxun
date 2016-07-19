@@ -34,12 +34,12 @@
                     <td>
                          <table>
                             <tr>
-                                <td  class="queryDate" style="width:60px">开始时间：</td>
+                                <td style="width:60px">开始时间：</td>
 
-                                <td class="queryDate">
+                                <td>
                                     <input id="startDate" type="text" class="easyui-datetimebox" required="required" style="width: 150px;" />
                                 </td>     
-                                <td class="queryDate">                            
+                                <td>                            
                                     结束时间：<input id="endDate" type="text" class="easyui-datetimebox" required="required" style="width: 150px;" />
                                 </td> 
                                            
@@ -52,7 +52,7 @@
                                 <td style="width:80px"> 主设备名称：</td> 
                                 <td><input id="EquipmentName" class="easyui-combobox"data-options="panelHeight: 'auto'" style="width: 120px;"/></td>  
                                 <td style="width:20px"></td>  
-                                <td class="queryDate"><a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true"
+                                <td><a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true"
                                     onclick="QueryReportFun();">查询</a>
                                 </td>               
                            </tr>

@@ -60,12 +60,6 @@ function onOrganisationTreeClick(node) {
     organizationID = node.OrganizationId;
     $('#organizationId').val(organizationID);
 
-    //初始化
-    $('#MainMachine').combobox('setText', "");
-    $('#MainMachine').combobox('setValue',"");
-
-    //g_timer = setTimeout("realtimeAlarm()", 300000);
-
     LoadMainMachineClassList(organizationID);
 }
 //var equipmentId = "";
@@ -82,38 +76,19 @@ function LoadMainMachineClassList(organizationID) {
             m_MsgData = jQuery.parseJSON(msg.d);
             $('#EquipmentName').combobox({
                 data: m_MsgData.rows,
-                valueField: 'VariableName',
+                valueField: 'Variable',
                 textField: 'EquipmentName',
                 onSelect: function (param) {
-                    variableName = param.VariableName;
-                    mOrganizationID = param.OrganizationID;
+                    var mVariable = param.Variable;
+                    var arrVariable = mVariable.split(',');
+                    mOrganizationID = arrVariable[0];
+                   variableName = arrVariable[1];               
                 }
             });
         }
     });
 }
 
-//function LoadMainMachineList(mEquipmentId) {
-//    $.ajax({
-//        type: "POST",
-//        url: "MachineRunState.aspx/MainMachineList",
-//        data: '{mEquipmentId: "' + mEquipmentId  + '"}',
-//        contentType: "application/json; charset=utf-8",
-//        dataType: "json",
-//        success: function (msg) {
-//            var  m_MsgData = jQuery.parseJSON(msg.d);
-//            $('#MainMachine').combobox({
-//                data: m_MsgData.rows,
-//                valueField: 'VariableName',
-//                textField: 'VariableDescription',
-//                onSelect: function (param) {
-//                    variableName = param.VariableName;
-//                    mOrganizationID = param.OrganizationID;
-//                }
-//            });
-//        }
-//    });
-//}
 function QueryReportFun() {
     editIndex = undefined;
     var startTime = $('#startDate').datetimebox('getValue');//开始时间

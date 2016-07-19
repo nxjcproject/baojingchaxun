@@ -40,7 +40,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EasyUIJsonParser">
-      <HintPath>..\..\Lib\EasyUIJsonParser.dll</HintPath>
+      <HintPath>..\..\..\bin\EasyUIJsonParser.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -59,16 +59,16 @@
     <Reference Include="System.EnterpriseServices" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="WebStyleBaseForEnergy">
-      <HintPath>..\..\Lib\WebStyleBaseForEnergy.dll</HintPath>
+      <HintPath>..\..\..\bin\WebStyleBaseForEnergy.dll</HintPath>
     </Reference>
     <Reference Include="WebUserContorls.Web">
-      <HintPath>..\..\Lib\WebUserContorls.Web.dll</HintPath>
+      <HintPath>..\..\..\bin\WebUserContorls.Web.dll</HintPath>
     </Reference>
     <Reference Include="WebUserControls.Infrastructure">
-      <HintPath>..\..\Lib\WebUserControls.Infrastructure.dll</HintPath>
+      <HintPath>..\..\..\bin\WebUserControls.Infrastructure.dll</HintPath>
     </Reference>
     <Reference Include="WebUserControls.Service">
-      <HintPath>..\..\Lib\WebUserControls.Service.dll</HintPath>
+      <HintPath>..\..\..\bin\WebUserControls.Service.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
