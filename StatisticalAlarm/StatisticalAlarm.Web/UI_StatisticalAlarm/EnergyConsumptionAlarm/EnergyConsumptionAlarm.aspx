@@ -28,34 +28,6 @@
         </div>
         <!-- 图表开始 -->
         <div id="toolbar_ReportTemplate" style="display: none;">
-            <%--<table>
-                <tr>
-                    <td>
-                        <table>
-                            <tr>
-                                <td style="width: 60px">生产线：</td>
-                                <td>
-                                    <input id="productLineName" class="easyui-textbox" style="width: 150px;" readonly="true" /><input id="organizationId" readonly="true" style="display: none;" /></td>
-                                <td>
-                                    <input type="radio" id="rdoYearly" name="alarmType" value="realtime" checked="checked" onclick="realtimeAlarm()" />实时
-                                     <input type="radio" id="rdoMonthly" name="alarmType" value="history" onclick="setHistory()" />历史
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="queryDate" style="display: none; width: 60px">开始时间：</td>
-                                <td class="queryDate" style="display: none">
-                                    <input id="startDate" type="text" class="easyui-datetimebox" required="required" style="width: 150px;" />
-                                </td>
-                                <td class="queryDate" style="display: none">结束时间：<input id="endDate" type="text" class="easyui-datetimebox" required="required" style="width: 150px;" />
-                                </td>
-                                <td class="queryDate" style="display: none"><a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true"
-                                    onclick="QueryReportFun();">查询</a>
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-            </table>--%>
             <div style="margin-left:10px;margin-top:5px;margin-bottom:5px">
                 <span style="margin-right:12px">
                     生产线:
@@ -67,8 +39,8 @@
                 </span>
             </div>
             <div class="historyTool" style="display: none;margin-left:10px;margin-bottom:5px" >
-                <span>故障名称:</span>
-                <select id="cc" class="easyui-combotree" name="dept" style="width:150px;" data-options="panelHeight:true"></select>
+                <span>报警类型:</span>
+                <input id="alarmType" class="easyui-combobox" style="width:150px;"/>
                 <span>开始时间:</span>
                 <span>
                     <input id="startDate" type="text" class="easyui-datetimebox" required="required" style="width: 150px;" />
@@ -80,8 +52,6 @@
                     <input id="endDate" type="text" class="easyui-datetimebox" required="required" style="width: 150px;" />
                 </span>
                 <span>
-                    <%--<input type="radio" id="Radio3" name="myType" value="energyAlarm" checked="checked" onclick="realtimeAlarm()" />能耗报价
-                    <input type="radio" id="Radio4" name="myType" value="coalAlarm" onclick="setHistory()" />煤耗报警--%>
                     <a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true"
                                     onclick="QueryReportFun();">查询</a>
                 </span>

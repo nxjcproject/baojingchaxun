@@ -36,14 +36,14 @@ namespace StatisticalAlarm.Web.UI_StatisticalAlarm.EnergyConsumptionAlarm
             return json;
         }
         [WebMethod]
-        public static string GetHistoryAlarm(string organizationId, string startTime, string endTime,string variableId)
+        public static string GetHistoryAlarm(string organizationId, string startTime, string endTime, string alarmType)
         {
-            DataTable table = EnergyConsumptionAlarmService.GetHistoryAlarmData(organizationId, startTime, endTime,variableId);
+            DataTable table = EnergyConsumptionAlarmService.GetHistoryAlarmData(organizationId, startTime, endTime, alarmType);
             string json = EasyUIJsonParser.DataGridJsonParser.DataTableToJson(table);
             return json;
         }
         [WebMethod]
-        public static string GetCombotreeData(string organizationId)
+        public static string GetComboboxData(string organizationId)
         {
             DataTable table = EnergyConsumptionAlarmService.GetAlarmItem(organizationId);
             string json= EasyUIJsonParser.TreeGridJsonParser.DataTableToJsonByLevelCode(table, "LevelCode");

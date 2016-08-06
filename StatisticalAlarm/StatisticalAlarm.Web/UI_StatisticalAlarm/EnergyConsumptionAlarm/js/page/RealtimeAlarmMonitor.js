@@ -3,6 +3,7 @@
 $(function () {
     InitDate();
     loadDataGrid("first");
+    LoadCombobox();
 });
 //初始化日期框
 function InitDate() {
@@ -14,12 +15,31 @@ function InitDate() {
     $('#startDate').datetimebox('setValue', beforeString);
     $('#endDate').datetimebox('setValue', nowString);
 }
+var AlarmType = "";
+function LoadCombobox() {
+    $('#alarmType').combobox({
+        valueField: 'valueName',
+        textField: 'typeName',
+        panelHeight: 'auto',
+        data: [{
+            typeName: '电耗报警',
+            valueName: '电耗超标'
+        },{
+            typeName: '煤耗报警',
+            valueName: '煤耗超标'
+        },{
+            typeName: '功率报警',
+            valueName: '功率超标'
+        }],
+        onSelect: function (record) {
+             AlarmType = record.valueName;
+        }
+    });
+}
 function onOrganisationTreeClick(node) {
     $('#productLineName').textbox('setText', node.text);
     $('#organizationId').val(node.OrganizationId);
         realtimeAlarm();
-    //g_timer = setTimeout("realtimeAlarm()", 300000);
-        updateCombobox();
 }
 
 function setTimer() {
@@ -39,6 +59,7 @@ function realtimeAlarm() {
         $(".historyTool").hide();
     }
     var organizationId = $('#organizationId').val();
+    var mager = $.messager.alert('提示', '数据加载中...');
     $.ajax({
         type: "POST",
         url: "EnergyConsumptionAlarm.aspx/GetRealTimeAlarm",
@@ -47,14 +68,19 @@ function realtimeAlarm() {
         dataType: "json",
         async: false,//同步执行
         success: function (msg) {
+            mager.window('close');
             m_MsgData = jQuery.parseJSON(msg.d);
-            if (m_MsgData.total==0) {
-                $.messager.alert('警告', '没有查询的数据');
+            if (m_MsgData.total == 0) {
+                loadDataGrid("last", []);
+                $.messager.alert('提示', '当前没有报警！');
             }
             else {                
                 loadDataGrid("last", m_MsgData);
                 setTimer();
             }
+        },
+        beforeSend: function (XMLHttpRequest) {
+            mager;
         },
         error: setTimer()
     });
@@ -63,12 +89,13 @@ function loadDataGrid(type, myData) {
     if (type == "first") {
         $('#gridMain_ReportTemplate').datagrid({
             columns: [[
-                    { field: 'AlarmDateTime', title: '报警开始时间', width: 150, align: "center" },
-                    { field: 'ProductLineName', title: '产线', width: 100},
-                    { field: 'Name', title: '工序', width: 100 },
+                    { field: 'AlarmDateTime', title: '报警开始时间', width: 120 },
+                    { field: 'Name', title: '工序', width: 120 },
+                 ///   { field: 'TimeSpan', title: '报警时间段', width: 200 },
                     { field: 'EnergyConsumptionType', title: '报警类型', width: 100 },
-                    { field: 'StandardValue', title: '报警上限', width: 100, align: "center" },
-                    { field: 'ActualValue', title: '报警实际值', width: 100, align: "center" }
+                    { field: 'StandardValue', title: '报警上限', width: 100 },
+                    { field: 'ActualValue', title: '报警实际值', width: 100},
+                    { field: 'Superscale', title: '超标百分比', width: 100 }
             ]],
             fit: true,
             pagination: true,
@@ -81,21 +108,13 @@ function loadDataGrid(type, myData) {
         })
     }
     else {
-        $('#gridMain_ReportTemplate').datagrid({ loadFilter: pagerFilter }).datagrid('loadData', myData["rows"]);
+        $('#gridMain_ReportTemplate').datagrid('loadData', myData);
     }
 }
 
 function QueryReportFun() {
-    var myTree = $('#cc').combotree('tree');	// get the tree object
-    var selectedNode = myTree.tree('getSelected');
-    if (selectedNode!=null) {
-        var myVariableId = selectedNode.VariableId;
-    }
-    else {
-        myVariableId = "null";
-    }
-    editIndex = undefined;
     var organizationId = $('#organizationId').val();
+    var myAlarmType = AlarmType;
     var startTime = $('#startDate').datetimebox('getValue');//开始时间
     var endTime = $('#endDate').datetimebox('getValue');//结束时间
     if (organizationId == "" || startDate == "" || endDate == "") {
@@ -106,20 +125,26 @@ function QueryReportFun() {
         $.messager.alert('警告', '结束时间不能大于开始时间！');
         return;
     }
+    var mager = $.messager.alert('提示','数据加载中...');
     $.ajax({
         type: "POST",
         url: "EnergyConsumptionAlarm.aspx/GetHistoryAlarm",
-        data: '{organizationId: "' + organizationId + '", startTime: "' + startTime + '", endTime: "' + endTime + '", variableId: "' + myVariableId + '"}',
+        data: '{organizationId: "' + organizationId + '", startTime: "' + startTime + '", endTime: "' + endTime + '", alarmType: "' + myAlarmType + '"}',
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (msg) {
+            mager.window('close');
             m_MsgData = jQuery.parseJSON(msg.d);
             if (m_MsgData.total == 0) {
-                alert("没有查询的数据");
+                loadDataGrid("last", []);
+                $.messager.alert('提示', '该时间段内没有报警数据...');
             }
             else {
                 loadDataGrid("last", m_MsgData);
             }
+        },
+        beforeSend: function (XMLHttpRequest) {
+            mager;
         },
         error: handleError
     });
@@ -129,25 +154,6 @@ function handleError() {
     $('#gridMain_ReportTemplate').datagrid('loadData', []);
     $.messager.alert('失败', '获取数据失败');
 }
-
-
-function updateCombobox() {
-    var organizationId = $('#organizationId').val();
-    $.ajax({
-        type: "POST",
-        url: "EnergyConsumptionAlarm.aspx/GetCombotreeData",
-        data: '{organizationId: "' + organizationId + '"}',
-        contentType: "application/json; charset=utf-8",
-        dataType: "json",
-        success: function (msg) {
-            m_MsgData = jQuery.parseJSON(msg.d);
-            $('#cc').combotree('loadData', m_MsgData);
-        }
-        //error: handleError
-    });
-}
-
-
 //datagrid最下面分页栏使用
 function pagerFilter(data) {
     if (typeof data.length == 'number' && typeof data.splice == 'function') {	// is array

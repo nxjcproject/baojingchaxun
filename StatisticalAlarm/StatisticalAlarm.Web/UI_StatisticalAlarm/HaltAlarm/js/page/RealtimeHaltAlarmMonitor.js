@@ -39,6 +39,7 @@ function realtimeAlarm() {
     else {
         $(".queryDate").hide();
     }
+    var mager = $.messager.alert('提示', '数据加载中...');
     var organizationId = $('#organizationId').val();
     $.ajax({
         type: "POST",
@@ -48,16 +49,19 @@ function realtimeAlarm() {
         dataType: "json",
         async: false,//同步执行
         success: function (msg) {
+            mager.window('close');
             if (msg.d == "[]") {
-                alert("没有查询的数据");
-                return;
+                loadDataGrid("last", []);
+                $.messager.alert('提示', '当前没有报警！');
             }
             else {
                 m_MsgData = jQuery.parseJSON(msg.d);
                loadDataGrid("last", m_MsgData);
                 setTimer();
-            }
-           
+            }           
+        },
+        beforeSend: function (XMLHttpRequest) {
+            mager;
         },
         error: setTimer()
     });
@@ -107,21 +111,26 @@ function QueryReportFun() {
         m_data = '{organizationId: "' + organizationId + '", startTime: "' + startTime + '", endTime: "' + endTime + '"}';
     } 
 
-
+    var mager = $.messager.alert('提示', '数据加载中...');
     $.ajax({
         type: "POST",
         url: m_url,
         data: m_data,
         contentType: "application/json; charset=utf-8",
         dataType: "json",
-        success: function (msg) {  
+        success: function (msg) {
+            mager.window('close');
             if (msg.d == "[]") {
-                alert("没有查询的数据");
+                loadDataGrid("last", []);
+               $.messager.alert('提示', '该时间段内没有报警数据!');
             }
             else {
                 m_MsgData = jQuery.parseJSON(msg.d);
                 loadDataGrid("last", m_MsgData);
             }                         
+        },
+        beforeSend: function (XMLHttpRequest) {
+            mager;
         },
         error: handleError
     });

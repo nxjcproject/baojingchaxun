@@ -16,19 +16,26 @@ namespace StatisticalAlarm.Service
         {
             string connectionString = ConnectionStringFactory.NXJCConnectionString;
             ISqlServerDataFactory dataFactory = new SqlServerDataFactory(connectionString);
-            string mySql = @"select top(1000) A.AlarmDateTime,B.Name as ProductLineName,C.Name,C.EnergyConsumptionType,C.StandardValue,C.ActualValue
+            string mySql = @"select C.[OrganizationID]
+	                                ,B.LevelCode,B.Name+C.Name as Name 
+                                    ,C.[EnergyConsumptionType]
+                                    ,C.[StartTime] as AlarmDateTime
+                                    ,C.[TimeSpan]
+                                    ,C.[LevelCode]
+                                    ,C.[StandardValue]
+                                    ,C.[ActualValue]
+                                    ,C.[Superscale]
+                                    ,C.[Reason]
+                                    ,C.[VariableID]
                                 from system_TenDaysRealtimeAlarm A,system_Organization B,shift_EnergyConsumptionAlarmLog C
                                 where A.OrganizationID=B.OrganizationID
                                 and A.KeyId=C.EnergyConsumptionAlarmLogID
                                 and (A.AlarmType='EnergyConsumption'
                                 or A.AlarmType='Power'
                                 or A.AlarmType='CoalConsumption')
-                                and B.LevelCode like (
-						                                SELECT E.LevelCode
-						                                FROM system_Organization E
-						                                WHERE E.OrganizationID=@organizationId)+'%'
-                                order by A.AlarmDateTime desc";
-            SqlParameter parameter = new SqlParameter("organizationId", organizationId);
+                                and A.OrganizationID like @organizationId+'%'
+                                order by C.[StartTime] desc";
+            SqlParameter parameter = new SqlParameter("@organizationId", organizationId);
             DataTable table = dataFactory.Query(mySql, parameter);
             return table;
         }
@@ -37,42 +44,30 @@ namespace StatisticalAlarm.Service
         {
             string connectionString = ConnectionStringFactory.NXJCConnectionString;
             ISqlServerDataFactory dataFactory = new SqlServerDataFactory(connectionString);
-            string mySql = "";
             List<SqlParameter> parameterList = new List<SqlParameter>();
-            if (variableId == "null")
-            {
-                mySql = @"select top(1000) A.StartTime as AlarmDateTime, B.Name as ProductLineName,A.Name,A.EnergyConsumptionType,A.StandardValue,A.ActualValue
-                        from shift_EnergyConsumptionAlarmLog A,system_Organization B
-                        where A.OrganizationID=B.OrganizationID
-                        and (A.StartTime>=@startTime and A.StartTime<=@endTime)
-                        and B.LevelCode like (
-				                        SELECT E.LevelCode
-				                        FROM system_Organization E
-				                        WHERE E.OrganizationID=@organizationId)+'%'
-                        order by A.StartTime desc";
-                parameterList.Add(new SqlParameter("startTime", startTime));
-                parameterList.Add(new SqlParameter("endTime", endTime));
-                parameterList.Add(new SqlParameter("organizationId", organizationId));
-            }
-            else
-            {
-                mySql = @"select top(1000) A.StartTime as AlarmDateTime, B.Name as ProductLineName,A.Name,A.EnergyConsumptionType,A.StandardValue,A.ActualValue
-                        from shift_EnergyConsumptionAlarmLog A,system_Organization B
-                        where A.OrganizationID=B.OrganizationID
-                        and (A.StartTime>=@startTime and A.StartTime<=@endTime)
-                        and B.LevelCode like (
-				                        SELECT E.LevelCode
-				                        FROM system_Organization E
-				                        WHERE E.OrganizationID=@organizationId)+'%'
-                        and VariableID=@variableId
-                        order by A.StartTime desc";
-                parameterList.Add(new SqlParameter("startTime", startTime));
-                parameterList.Add(new SqlParameter("endTime", endTime));
-                parameterList.Add(new SqlParameter("organizationId", organizationId));
-                parameterList.Add(new SqlParameter("variableId", variableId));
-            }
+            string mySql = @"  select A.[OrganizationID]
+	                                ,B.LevelCode,B.Name+A.Name as Name 
+                                    ,A.[EnergyConsumptionType]
+                                    ,A.[StartTime] as AlarmDateTime
+                                    ,A.[TimeSpan]
+                                    ,A.[LevelCode]
+                                    ,A.[StandardValue]
+                                    ,A.[ActualValue]
+                                    ,A.[Superscale]
+                                    ,A.[Reason]
+                                    ,A.[VariableID]
+                                FROM [NXJC].[dbo].[shift_EnergyConsumptionAlarmLog] A,[NXJC].[dbo].[system_Organization] B
+                                where A.[OrganizationID]=B.[OrganizationID]
+                                and A.[OrganizationID] like @organizationId+'%'
+                                and (A.[StartTime]>=@startTime and A.[StartTime]<=@endTime)
+                                and A.[EnergyConsumptionType]=@variableId
+                                order by A.[StartTime] desc";
+            parameterList.Add(new SqlParameter("@startTime", startTime));
+            parameterList.Add(new SqlParameter("@endTime", endTime));
+            parameterList.Add(new SqlParameter("@organizationId", organizationId));
+            parameterList.Add(new SqlParameter("@variableId", variableId));
             SqlParameter[] parameters = parameterList.ToArray();
-            DataTable table = dataFactory.Query(mySql, parameters);
+            DataTable table = dataFactory.Query(mySql, parameters);       
             return table;
         }
 
@@ -92,7 +87,7 @@ namespace StatisticalAlarm.Service
 								and A.OrganizationID=C.OrganizationID
                                 and A.OrganizationID=@organizationId
                                 order by OrganizationID,B.LevelCode";
-            SqlParameter parameter = new SqlParameter("organizationId", organizationId);
+            SqlParameter parameter = new SqlParameter("@organizationId", organizationId);
             DataTable table = dataFactory.Query(mySql, parameter);
             return table;
         }
