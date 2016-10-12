@@ -19,15 +19,7 @@ function loadDataGrid(type, myData) {
                     { field: 'EquipmentName', title: '主机名称', width: 150 },
                     { field: 'Name', title: '产线', width: 100 },
                     //{ field: 'Count', title: '运行次数', width: 80 },
-                    {
-                        field: 'StartTime', title: '开机时间', width: 150, formatter: function (value, row, index) {
-                            if (row.StartTime == "" && row.HaltTime == "") {
-                                return value = "停机中...";
-                            } else {
-                                return value;
-                            }
-                        }
-                    },
+                    {field: 'StartTime', title: '开机时间', width: 150},
                     {
                         field: 'HaltTime', title: '停机时间', width: 150, formatter: function (value, row, index) {
                             if (row.StartTime != "" && row.HaltTime=="") {

@@ -19,7 +19,7 @@ namespace StatisticalAlarm.Web.UI_StatisticalAlarm.MachineRun
 #if DEBUG
                 ////////////////////调试用,自定义的数据授权
 
-                List<string> m_DataValidIdItems = new List<string>() { "zc_nxjc_byc_byf", "zc_nxjc_qtx", "zc_nxjc_tsc_tsf" };
+                List<string> m_DataValidIdItems = new List<string>() { "zc_nxjc_byc_byf", "zc_nxjc_qtx", "zc_nxjc_tsc_tsf", "zc_nxjc_znc_znf" };
                 AddDataValidIdGroup("ProductionOrganization", m_DataValidIdItems);
 #elif RELEASE
 #endif
