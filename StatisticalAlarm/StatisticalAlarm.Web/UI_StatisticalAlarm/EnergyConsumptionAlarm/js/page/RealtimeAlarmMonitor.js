@@ -59,7 +59,10 @@ function realtimeAlarm() {
         $(".historyTool").hide();
     }
     var organizationId = $('#organizationId').val();
-    var mager = $.messager.alert('提示', '数据加载中...');
+    var win = $.messager.progress({
+        title: '请稍后',
+        msg: '数据载入中...'
+    });
     $.ajax({
         type: "POST",
         url: "EnergyConsumptionAlarm.aspx/GetRealTimeAlarm",
@@ -68,7 +71,7 @@ function realtimeAlarm() {
         dataType: "json",
         async: false,//同步执行
         success: function (msg) {
-            mager.window('close');
+            $.messager.progress('close');
             m_MsgData = jQuery.parseJSON(msg.d);
             if (m_MsgData.total == 0) {
                 loadDataGrid("last", []);
@@ -80,22 +83,25 @@ function realtimeAlarm() {
             }
         },
         beforeSend: function (XMLHttpRequest) {
-            mager;
+            win;
         },
-        error: setTimer()
+        error: function () {
+            $.messager.progress('close');
+            setTimer()
+        }
     });
 }
 function loadDataGrid(type, myData) {
     if (type == "first") {
         $('#gridMain_ReportTemplate').datagrid({
             columns: [[
-                    { field: 'AlarmDateTime', title: '报警开始时间', width: 120 },
-                    { field: 'Name', title: '工序', width: 120 },
+                    { field: 'AlarmDateTime', title: '报警开始时间', width: 130 },
+                    { field: 'Name', title: '工序', width: 180 },
                  ///   { field: 'TimeSpan', title: '报警时间段', width: 200 },
-                    { field: 'EnergyConsumptionType', title: '报警类型', width: 100 },
-                    { field: 'StandardValue', title: '报警上限', width: 100 },
-                    { field: 'ActualValue', title: '报警实际值', width: 100},
-                    { field: 'Superscale', title: '超标百分比', width: 100 }
+                    { field: 'EnergyConsumptionType', title: '报警类型', width: 70 },
+                    { field: 'StandardValue', title: '报警上限', width: 70 },
+                    { field: 'ActualValue', title: '报警实际值', width: 70},
+                    { field: 'Superscale', title: '超标百分比', width: 70 }
             ]],
             fit: true,
             pagination: true,
@@ -125,7 +131,10 @@ function QueryReportFun() {
         $.messager.alert('警告', '结束时间不能大于开始时间！');
         return;
     }
-    var mager = $.messager.alert('提示','数据加载中...');
+    var win = $.messager.progress({
+        title: '请稍后',
+        msg: '数据载入中...'
+    });
     $.ajax({
         type: "POST",
         url: "EnergyConsumptionAlarm.aspx/GetHistoryAlarm",
@@ -133,7 +142,7 @@ function QueryReportFun() {
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (msg) {
-            mager.window('close');
+            $.messager.progress('close');
             m_MsgData = jQuery.parseJSON(msg.d);
             if (m_MsgData.total == 0) {
                 loadDataGrid("last", []);
@@ -144,9 +153,12 @@ function QueryReportFun() {
             }
         },
         beforeSend: function (XMLHttpRequest) {
-            mager;
+            win;
         },
-        error: handleError
+        error: function () {
+            $.messager.progress('close');
+            handleError
+        }
     });
 }
 

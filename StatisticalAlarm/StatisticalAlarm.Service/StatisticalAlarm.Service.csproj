@@ -32,7 +32,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="SqlServerDataAdapter">
-      <HintPath>..\..\..\..\Project_JCDS\Lib\SqlServerDataAdapter.dll</HintPath>
+      <HintPath>..\..\..\..\..\通用引用\SqlServerDataAdapter.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

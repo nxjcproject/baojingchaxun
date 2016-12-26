@@ -39,7 +39,10 @@ function realtimeAlarm() {
     else {
         $(".queryDate").hide();
     }
-    var mager = $.messager.alert('提示', '数据加载中...');
+    var win = $.messager.progress({
+        title: '请稍后',
+        msg: '数据载入中...'
+    });
     var organizationId = $('#organizationId').val();
     $.ajax({
         type: "POST",
@@ -49,7 +52,7 @@ function realtimeAlarm() {
         dataType: "json",
         async: false,//同步执行
         success: function (msg) {
-            mager.window('close');
+            $.messager.progress('close');
             if (msg.d == "[]") {
                 loadDataGrid("last", []);
                 $.messager.alert('提示', '当前没有报警！');
@@ -61,17 +64,20 @@ function realtimeAlarm() {
             }           
         },
         beforeSend: function (XMLHttpRequest) {
-            mager;
+            win;
         },
-        error: setTimer()
+        error: function () {
+            $.messager.progress('close');
+            setTimer()
+        }
     });
 }
 function loadDataGrid(type, myData) {
     if (type == "first") {
         $('#gridMain_ReportTemplate').treegrid({
             columns: [[
-                    { field: 'EquipmentName', title: '报警名称', width: 240 },                 
-                    { field: 'Name', title: '产线', width: 100 },
+                    { field: 'EquipmentName', title: '报警名称', width: 180 },                 
+                    { field: 'Name', title: '产线', width: 80 },
                     { field: 'Type', title: '报警类别', width: 80, align: "center" },
                     { field: 'Count', title: '报警从机数', width: 80, align: "center" },
                     { field: 'HaltTime', title: '停机时间', width: 150 },
@@ -111,7 +117,10 @@ function QueryReportFun() {
         m_data = '{organizationId: "' + organizationId + '", startTime: "' + startTime + '", endTime: "' + endTime + '"}';
     } 
 
-    var mager = $.messager.alert('提示', '数据加载中...');
+    var win = $.messager.progress({
+        title: '请稍后',
+        msg: '数据载入中...'
+    });
     $.ajax({
         type: "POST",
         url: m_url,
@@ -119,7 +128,7 @@ function QueryReportFun() {
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (msg) {
-            mager.window('close');
+            $.messager.progress('close');
             if (msg.d == "[]") {
                 loadDataGrid("last", []);
                $.messager.alert('提示', '该时间段内没有报警数据!');
@@ -130,9 +139,12 @@ function QueryReportFun() {
             }                         
         },
         beforeSend: function (XMLHttpRequest) {
-            mager;
+            win;
         },
-        error: handleError
+        error: function () {
+            $.messager.progress('close');
+            handleError
+        }
     });
 }
 

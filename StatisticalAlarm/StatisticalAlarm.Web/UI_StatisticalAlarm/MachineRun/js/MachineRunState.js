@@ -16,8 +16,8 @@ function loadDataGrid(type, myData) {
     if (type == "first") {
         $('#gridMain_ReportTemplate').datagrid({
             columns: [[
-                    { field: 'EquipmentName', title: '主机名称', width: 150 },
-                    { field: 'Name', title: '产线', width: 100 },
+                    { field: 'EquipmentName', title: '主机名称', width: 120 },
+                    { field: 'Name', title: '产线', width: 60 },
                     //{ field: 'Count', title: '运行次数', width: 80 },
                     {field: 'StartTime', title: '开机时间', width: 150},
                     {
@@ -93,6 +93,10 @@ function QueryReportFun() {
         $.messager.alert('警告', '结束时间不能大于开始时间！');
         return;
     }
+    var win = $.messager.progress({
+        title: '请稍后',
+        msg: '数据载入中...'
+    });
     $.ajax({
         type: "POST",
         url: "MachineRunState.aspx/GetHistoryHaltAlarm",
@@ -100,6 +104,7 @@ function QueryReportFun() {
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (msg) {
+            $.messager.progress('close');
             m_MsgData = jQuery.parseJSON(msg.d);
             if (m_MsgData.total == 0) {
                 $('#gridMain_ReportTemplate').datagrid('loadData', []);
@@ -109,7 +114,11 @@ function QueryReportFun() {
                 loadDataGrid("last", m_MsgData);
             }
         },
+        beforeSend: function (XMLHttpRequest) {
+            win;
+        },
         error: function handleError() {
+            $.messager.progress('close');
             $('#gridMain_ReportTemplate').datagrid('loadData', []);
             $.messager.alert('失败', '获取数据失败');
         }

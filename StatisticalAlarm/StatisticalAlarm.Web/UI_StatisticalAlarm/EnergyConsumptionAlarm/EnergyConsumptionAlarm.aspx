@@ -23,7 +23,7 @@
 </head>
 <body>
     <div class="easyui-layout" data-options="fit:true,border:false">
-        <div data-options="region:'west',split:true" style="width: 230px;">
+        <div data-options="region:'west',split:true" style="width: 150px;">
             <uc1:OrganisationTree ID="OrganisationTree_ProductionLine" runat="server" />
         </div>
         <!-- 图表开始 -->
@@ -33,7 +33,7 @@
                     生产线:
                 </span>
                 <span>
-                    <input id="productLineName" class="easyui-textbox" style="width: 150px;" readonly="readonly" /><input id="organizationId" readonly="readonly" style="display: none;" />
+                    <input id="productLineName" class="easyui-textbox" style="width: 100px;" readonly="readonly" /><input id="organizationId" readonly="readonly" style="display: none;" />
                     <input type="radio" id="Radio1" name="alarmType" value="realtime" checked="checked" onclick="realtimeAlarm()" />实时
                     <input type="radio" id="Radio2" name="alarmType" value="history" onclick="setHistory()" />历史
                 </span>
