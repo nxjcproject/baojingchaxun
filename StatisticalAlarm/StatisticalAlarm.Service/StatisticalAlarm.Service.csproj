@@ -32,7 +32,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="SqlServerDataAdapter">
-      <HintPath>..\..\..\..\..\通用引用\SqlServerDataAdapter.dll</HintPath>
+      <HintPath>..\..\..\ConsistencyAnalysis-master\ConsistencyAnalysis.Web\bin\SqlServerDataAdapter.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

@@ -73,25 +73,26 @@ namespace StatisticalAlarm.Service.MachineRunService
                                         };
             DataTable originalTable = dataFactory.Query(mySql, parameters);
             int length = originalTable.Rows.Count;
-            if (length > 1)
+            if (length >= 1)
             {
-                for(int j=0;j<length;j++)
+                for (int j = 0; j < length; j++)
                 {
                     if (Convert.ToString(originalTable.Rows[0]["HaltTime"]) != "")
                     {
                         TimeSpan runningSpan = Convert.ToDateTime(originalTable.Rows[0]["HaltTime"]) - Convert.ToDateTime(originalTable.Rows[0]["StartTime"]);
                         string runningTime = runningSpan.Days.ToString() + "天" + runningSpan.Hours.ToString() + "时" + runningSpan.Minutes.ToString() + "分";
                         originalTable.Rows[0]["RunTime"] = runningTime;
-                    }else
+                    }
+                    else
                     {
                         TimeSpan runningSpan = DateTime.Now - Convert.ToDateTime(originalTable.Rows[0]["StartTime"]);
                         string runningTime = runningSpan.Days.ToString() + "天" + runningSpan.Hours.ToString() + "时" + runningSpan.Minutes.ToString() + "分";
                         originalTable.Rows[0]["HaltTime"] = DBNull.Value;
-                        originalTable.Rows[0]["RunTime"] = runningTime;                  
+                        originalTable.Rows[0]["RunTime"] = runningTime;
                     }
-                
+
                 }
-           
+
             }
             else
             {
