@@ -19,7 +19,7 @@ function loadDataGrid(type, myData) {
                     { field: 'EquipmentName', title: '主机名称', width: 120 },
                     { field: 'Name', title: '产线', width: 60 },
                     //{ field: 'Count', title: '运行次数', width: 80 },
-                    {field: 'StartTime', title: '开机时间', width: 150},
+                    { field: 'StartTime', title: '开机时间', width: 150 },                  
                     {
                         field: 'HaltTime', title: '停机时间', width: 150, formatter: function (value, row, index) {
                             if (row.StartTime != "" && row.HaltTime=="") {
@@ -29,7 +29,18 @@ function loadDataGrid(type, myData) {
                             }
                         }
                     },
-                    { field: 'RunTime', title: '运行时间', width: 100},
+                    {
+                        field: 'RecoverTime', title: '下次开机时间', width: 150, formatter: function (value, row, index) {
+                            if (row.HaltTime != "" && row.RecoverTime == "") {
+                                return value = "正在停运...";
+                            }
+                            else {
+                                return value;
+                            }
+                        }
+                    },
+                    { field: 'RunTime', title: '运行时间', width: 100 },
+                    { field: 'StopTime', title: '停运时间', width: 100 },
                     { field: 'ReasonText', title: '原因', width: 300 }
             ]],
             fit: true,
