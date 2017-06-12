@@ -56,7 +56,7 @@ namespace StatisticalAlarm.Service.MachineRunService
         {
             string connectionString = ConnectionStringFactory.NXJCConnectionString;
             ISqlServerDataFactory dataFactory = new SqlServerDataFactory(connectionString);
-            string mySql = @"select A.OrganizationID as LevelCode,'LeafNode' as Type,B.Name,A.EquipmentName,A.Label as MasterLabel,A.StartTime as StartTime,A.ReasonText,A.HaltTime as HaltTime,A.RecoverTime,
+            string mySql = @"select A.OrganizationID as LevelCode,'LeafNode' as Type,B.Name,A.EquipmentName,A.Label as MasterLabel,A.StartTime as StartTime,A.ReasonText,A.HaltTime as HaltTime,A.RecoverTime,A.Remarks,
                             convert(varchar,DATEDIFF(MINUTE,A.StartTime,A.HaltTime)/60/24)+'天'+convert(varchar,DATEDIFF(Minute,A.StartTime,A.HaltTime)/60-DATEDIFF(MINUTE,A.StartTime,A.HaltTime)/60/24*24)+'时'+convert(varchar,DATEDIFF(minute,A.StartTime,A.HaltTime)-DATEDIFF(minute,A.StartTime,A.HaltTime)/60/24*24*60-(DATEDIFF(Minute,A.StartTime,A.HaltTime)/60-DATEDIFF(MINUTE,A.StartTime,A.HaltTime)/60/24*24)*60)+'分' as RunTime,
                             convert(varchar,DATEDIFF(MINUTE,A.HaltTime,A.RecoverTime)/60/24)+'天'+
 							convert(varchar,DATEDIFF(Minute,A.HaltTime,A.RecoverTime)/60-DATEDIFF(MINUTE,A.HaltTime,A.RecoverTime)/60/24*24)+'时'+
@@ -70,7 +70,7 @@ namespace StatisticalAlarm.Service.MachineRunService
                             and A.StartTime>=@startTime
                             and A.StartTime<=@endTime
                             and A.Label=@mainMachine
-                            group by A.EquipmentName,A.StartTime,A.HaltTime,A.OrganizationID,LevelCode,B.Name,A.Label,A.ReasonText,Type,A.RecoverTime  		                              									 
+                            group by A.EquipmentName,A.StartTime,A.HaltTime,A.OrganizationID,LevelCode,B.Name,A.Label,A.ReasonText,Type,A.RecoverTime,A.Remarks  		                              									 
 							order by EquipmentName,StartTime desc";
             SqlParameter[] parameters = { new SqlParameter("@organizationId", organizationId), 
                                             new SqlParameter("@startTime", startTime),
