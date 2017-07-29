@@ -39,8 +39,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EasyUIJsonParser">
-      <HintPath>..\..\..\yuangongkaohe-master\StaffAssessment\StaffAssessment.Web\bin\EasyUIJsonParser.dll</HintPath>
+    <Reference Include="EasyUIJsonParser, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\EasyUIJsonParser\EasyUIJsonParser\bin\Debug\EasyUIJsonParser.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -58,8 +59,9 @@
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="WebStyleBaseForEnergy">
-      <HintPath>..\..\..\yuangongkaohe-master\StaffAssessment\StaffAssessment.Web\bin\WebStyleBaseForEnergy.dll</HintPath>
+    <Reference Include="WebStyleBaseForEnergy, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\WebStyleBaseForEnergy_开发用\WebStyleBaseForEnergy\bin\Debug\WebStyleBaseForEnergy.dll</HintPath>
     </Reference>
     <Reference Include="WebUserContorls.Web">
       <HintPath>..\..\..\yuangongkaohe-master\StaffAssessment\StaffAssessment.Web\bin\WebUserContorls.Web.dll</HintPath>
@@ -1579,6 +1581,8 @@
     <Content Include="lib\pllib\syntaxhighlighter\styles\shThemejqPlot.min.css" />
     <Content Include="lib\pllib\themes\jquery.jqplot.css" />
     <Content Include="lib\pllib\themes\jquery.jqplot.min.css" />
+    <Content Include="UI_MachineHaltProduction\js\page\MachineHaltProduction.js" />
+    <Content Include="UI_MachineHaltProduction\MachineHaltProduction.aspx" />
     <Content Include="UI_StatisticalAlarm\EnergyConsumptionAlarm\EnergyConsumptionAlarm.aspx" />
     <Content Include="UI_StatisticalAlarm\EnergyConsumptionAlarm\js\page\RealtimeAlarmMonitor.js" />
     <Content Include="UI_StatisticalAlarm\HaltAlarm\HaltAlarm.aspx" />
@@ -1590,6 +1594,13 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="UI_MachineHaltProduction\MachineHaltProduction.aspx.cs">
+      <DependentUpon>MachineHaltProduction.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UI_MachineHaltProduction\MachineHaltProduction.aspx.designer.cs">
+      <DependentUpon>MachineHaltProduction.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UI_StatisticalAlarm\EnergyConsumptionAlarm\EnergyConsumptionAlarm.aspx.cs">
       <DependentUpon>EnergyConsumptionAlarm.aspx</DependentUpon>
@@ -1618,7 +1629,9 @@
     <Content Include="lib\pllib\syntaxhighlighter\MIT-LICENSE" />
     <None Include="Properties\PublishProfiles\baojingchaxun.pubxml" />
     <None Include="Properties\PublishProfiles\Release.pubxml" />
+    <None Include="Properties\PublishProfiles\Release1.pubxml" />
     <None Include="Properties\PublishProfiles\StatisticalAlarm.pubxml" />
+    <None Include="Properties\PublishProfiles\test.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

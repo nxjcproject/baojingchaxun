@@ -81,6 +81,8 @@ function loadDataGrid(type, myData) {
                     { field: 'Type', title: '报警类别', width: 80, align: "center" },
                     { field: 'Count', title: '报警从机数', width: 80, align: "center" },
                     { field: 'HaltTime', title: '停机时间', width: 150 },
+                    { field: 'TimeDelay', title: '从机延时设定时间', width: 105, align: "center" },
+                    { field: 'RecoverTime', title: '主机开机时间', width: 150 },
                     { field: 'ReasonText', title: '原因', width: 300 }
             ]],
             fit:true,

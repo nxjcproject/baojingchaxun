@@ -8,6 +8,8 @@ using System.Web.Services;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
+
+
 namespace StatisticalAlarm.Web.UI_StatisticalAlarm.EnergyConsumptionAlarm
 {
     public partial class EnergyConsumptionAlarm : WebStyleBaseForEnergy.webStyleBase

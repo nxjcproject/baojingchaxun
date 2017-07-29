@@ -27,6 +27,13 @@ namespace StatisticalAlarm.Service.MachineRunService
 	                            order by A.DisplayIndex  ";
             SqlParameter param = new SqlParameter("@mOrganizationID", mOrganizationID);
             DataTable Table = dataFactory.Query(mySql, param);
+            DataRow dr = Table.NewRow();
+            dr["EquipmentId"] = "";
+            dr["EquipmentName"] = "全部";
+            dr["EquipmentCommonId"] = "";
+            dr["Variable"] = Table.Rows[0]["Variable"] + "1";//+1仅是为了使全部唯一标识
+            dr["VariableDescription"] = "";
+            Table.Rows.InsertAt(dr, 0);
             return Table;
         }
         public static DataTable GetMainMachineList(string mEquipmentId) 
@@ -52,7 +59,7 @@ namespace StatisticalAlarm.Service.MachineRunService
             DataTable Table = dataFactory.Query(mySql, param);
             return Table;
         }
-        public static DataTable GetHistoryHaltAlarmData(string organizationId, string MainMachine, string startTime, string endTime)
+        public static DataTable GetHistoryHaltAlarmData(string morganizationId, string MainMachine, string startTime, string endTime)
         {
             string connectionString = ConnectionStringFactory.NXJCConnectionString;
             ISqlServerDataFactory dataFactory = new SqlServerDataFactory(connectionString);
@@ -67,12 +74,12 @@ namespace StatisticalAlarm.Service.MachineRunService
                             from [dbo].[shift_MachineHaltLog] A,system_Organization B
                             where A.OrganizationID=B.OrganizationID
 							and A.OrganizationID=@organizationId
-                            and A.StartTime>=@startTime
-                            and A.StartTime<=@endTime
+                            and ((A.StartTime>=@startTime and A.StartTime<=@endTime)
+                                  or (A.HaltTime>=@startTime and A.HaltTime<=@endTime))
                             and A.Label=@mainMachine
                             group by A.EquipmentName,A.StartTime,A.HaltTime,A.OrganizationID,LevelCode,B.Name,A.Label,A.ReasonText,Type,A.RecoverTime,A.Remarks  		                              									 
 							order by EquipmentName,StartTime desc";
-            SqlParameter[] parameters = { new SqlParameter("@organizationId", organizationId), 
+            SqlParameter[] parameters = { new SqlParameter("@organizationId", morganizationId), 
                                             new SqlParameter("@startTime", startTime),
                                             new SqlParameter("@endTime", endTime),
                                             new SqlParameter("@mainMachine", MainMachine) 
@@ -107,7 +114,69 @@ namespace StatisticalAlarm.Service.MachineRunService
             }
             else
             {
-                DataRow[] rows = originalTable.Select("LevelCode='" + organizationId + "'and MasterLabel='" + MainMachine + "'");
+                DataRow[] rows = originalTable.Select("LevelCode='" + morganizationId + "'and MasterLabel='" + MainMachine + "'");
+                foreach (DataRow rw in rows)
+                {
+                    originalTable.Rows.Remove(rw);
+                }
+                originalTable.AcceptChanges();
+            }
+            return originalTable;
+        }
+        public static DataTable GetHistoryHaltAlarmDataAll(string organizationID, string startTime, string endTime)
+        {
+            string connectionString = ConnectionStringFactory.NXJCConnectionString;
+            ISqlServerDataFactory dataFactory = new SqlServerDataFactory(connectionString);
+            string mySql = @"select A.OrganizationID as LevelCode,'LeafNode' as Type,B.Name,A.EquipmentName,A.Label as MasterLabel,A.StartTime as StartTime,A.ReasonText,A.HaltTime as HaltTime,A.RecoverTime,A.Remarks,
+                            convert(varchar,DATEDIFF(MINUTE,A.StartTime,A.HaltTime)/60/24)+'天'+convert(varchar,DATEDIFF(Minute,A.StartTime,A.HaltTime)/60-DATEDIFF(MINUTE,A.StartTime,A.HaltTime)/60/24*24)+'时'+convert(varchar,DATEDIFF(minute,A.StartTime,A.HaltTime)-DATEDIFF(minute,A.StartTime,A.HaltTime)/60/24*24*60-(DATEDIFF(Minute,A.StartTime,A.HaltTime)/60-DATEDIFF(MINUTE,A.StartTime,A.HaltTime)/60/24*24)*60)+'分' as RunTime,
+                            convert(varchar,DATEDIFF(MINUTE,A.HaltTime,A.RecoverTime)/60/24)+'天'+
+							convert(varchar,DATEDIFF(Minute,A.HaltTime,A.RecoverTime)/60-DATEDIFF(MINUTE,A.HaltTime,A.RecoverTime)/60/24*24)+'时'+
+							convert(varchar,DATEDIFF(minute,A.HaltTime,A.RecoverTime)-DATEDIFF(minute,A.HaltTime,A.RecoverTime)/60/24*24*60
+							-(DATEDIFF(Minute,A.HaltTime,A.RecoverTime)/60
+							-DATEDIFF(MINUTE,A.HaltTime,A.RecoverTime)/60/24*24)*60)+'分' 
+							as StopTime
+                            from [dbo].[shift_MachineHaltLog] A,system_Organization B
+                            where A.OrganizationID=B.OrganizationID
+							and A.OrganizationID like @organizationID+'%'
+                            and A.StartTime>=@startTime
+                            and A.StartTime<=@endTime                           
+                            group by A.EquipmentName,A.StartTime,A.HaltTime,A.OrganizationID,LevelCode,B.Name,A.Label,A.ReasonText,Type,A.RecoverTime,A.Remarks  		                              									 
+							order by EquipmentName,StartTime desc";
+            SqlParameter[] parameters = {   new SqlParameter("@organizationID",organizationID),
+                                            new SqlParameter("@startTime", startTime),
+                                            new SqlParameter("@endTime", endTime),                                         
+                                        };
+            DataTable originalTable = dataFactory.Query(mySql, parameters);
+            int length = originalTable.Rows.Count;
+            if (length >= 1)
+            {
+                for (int j = 0; j < length; j++)
+                {
+                    if (Convert.ToString(originalTable.Rows[0]["HaltTime"]) != "")
+                    {
+                        TimeSpan runningSpan = Convert.ToDateTime(originalTable.Rows[0]["HaltTime"]) - Convert.ToDateTime(originalTable.Rows[0]["StartTime"]);
+                        string runningTime = runningSpan.Days.ToString() + "天" + runningSpan.Hours.ToString() + "时" + runningSpan.Minutes.ToString() + "分";
+                        originalTable.Rows[0]["RunTime"] = runningTime;
+                        if (Convert.ToString(originalTable.Rows[0]["RecoverTime"]) == "")
+                        {
+                            TimeSpan stopSpan = DateTime.Now - Convert.ToDateTime(originalTable.Rows[0]["HaltTime"]);
+                            string stopTime = stopSpan.Days.ToString() + "天" + stopSpan.Hours.ToString() + "时" + stopSpan.Minutes.ToString() + "分";
+                            originalTable.Rows[0]["RecoverTime"] = DBNull.Value;
+                            originalTable.Rows[0]["StopTime"] = stopTime;
+                        }
+                    }
+                    else
+                    {
+                        TimeSpan runningSpan = DateTime.Now - Convert.ToDateTime(originalTable.Rows[0]["StartTime"]);
+                        string runningTime = runningSpan.Days.ToString() + "天" + runningSpan.Hours.ToString() + "时" + runningSpan.Minutes.ToString() + "分";
+                        originalTable.Rows[0]["HaltTime"] = DBNull.Value;
+                        originalTable.Rows[0]["RunTime"] = runningTime;
+                    }
+                }
+            }
+            else
+            {
+                DataRow[] rows = originalTable.Select("LevelCode like '" + organizationID + "' + '%'");
                 foreach (DataRow rw in rows)
                 {
                     originalTable.Rows.Remove(rw);

@@ -27,21 +27,26 @@ namespace StatisticalAlarm.Service.HaltAlarmService
        {
            string connectionString = ConnectionStringFactory.NXJCConnectionString;
            ISqlServerDataFactory dataFactory = new SqlServerDataFactory(connectionString);
-           string mySql = @"select A.OrganizationID,C.Name,B.MasterEquipmentName,B.MasterLabel,B.EquipmentName as SlaveEquipmentName,B.Label as SlaveLabel,
-                                    '从机延时停机' as Type,B.WarmingTime as HaltTime,B.ReasonText,B.MasterHaltTime as time 
-                                    from [dbo].[shift_MachineHaltLog] A,[dbo].[shift_SlaverHaltDelayAlarmLog] B,system_Organization C,                                        
-                                         (select LevelCode from system_Organization where OrganizationID=@organizationId) D,
-                                         system_TenDaysRealtimeAlarm E
+           string mySql = @"select A.OrganizationID,RecoverTime=NULL,C.Name,B.MasterEquipmentName,B.MasterLabel,B.EquipmentName as SlaveEquipmentName,B.Label as SlaveLabel,
+                                    '从机延时停机' as Type,B.SlaveStopTime as HaltTime,B.ReasonText,B.MasterHaltTime as time,F.[TimeDelay] as TimeDelay
+                                    from [dbo].[shift_MachineHaltLog] A
+                                        ,[dbo].[shift_SlaverHaltDelayAlarmLog] B
+                                        ,system_Organization C
+                                        ,(select LevelCode from system_Organization where OrganizationID=@organizationId) D
+                                        ,system_TenDaysRealtimeAlarm E
+                                        ,[dbo].[system_SlaveMachineDescription] F
                                     where E.AlarmType='MachineHalt'
                                     and E.OrganizationID=C.OrganizationID
                                     and E.KeyId=A.MachineHaltLogID 
                                     and A.MachineHaltLogID=B.KeyID
                                     and A.HaltTime=B.MasterHaltTime
-                                    and C.LevelCode like D.LevelCode+'%'                                 
-                                    group by B.MasterHaltTime,B.WarmingTime,A.OrganizationID,C.Name,B.MasterEquipmentName,B.MasterLabel,B.EquipmentName,B.Label,B.ReasonText
+                                    and C.LevelCode like D.LevelCode+'%'
+                                    and F.[VariableName]=B.[Label] 
+                                    and F.[OrganizationID]=B.[OrganizationID]                                
+                                    group by B.MasterHaltTime,B.SlaveStopTime,A.OrganizationID,C.Name,B.MasterEquipmentName,B.MasterLabel,B.EquipmentName,B.Label,B.ReasonText,F.[TimeDelay]
                                     union all
-                                    select A.OrganizationID,B.Name,A.EquipmentName as MasterEquipmentName,A.Label as MasterLabel,'无' as SlaveEquipmentName,
-                                    '无' as SlaveLabel,'主机停机' as Type,D.AlarmDateTime as HaltTime,A.ReasonText,A.HaltTime as time
+                                    select A.OrganizationID,A.RecoverTime as RecoverTime,B.Name,A.EquipmentName as MasterEquipmentName,A.Label as MasterLabel,'无' as SlaveEquipmentName,
+                                    '无' as SlaveLabel,'主机停机' as Type,D.AlarmDateTime as HaltTime,A.ReasonText,A.HaltTime as time,NUll as TimeDelay
                                     from [dbo].[shift_MachineHaltLog] A,system_Organization B,
                                          (select LevelCode from system_Organization where OrganizationID=@organizationId) C,
                                          system_TenDaysRealtimeAlarm D
@@ -49,8 +54,8 @@ namespace StatisticalAlarm.Service.HaltAlarmService
                                      and D.OrganizationID=B.OrganizationID                                                                     
                                      and D.KeyId=A.MachineHaltLogID                                   
                                     and B.LevelCode like C.LevelCode+'%'                       
-                                    group by A.HaltTime,D.AlarmDateTime,A.OrganizationID,B.Name,A.EquipmentName,A.Label,A.ReasonText
-                                     order by HaltTime desc";
+                                    group by A.HaltTime,D.AlarmDateTime,A.RecoverTime,A.OrganizationID,B.Name,A.EquipmentName,A.Label,A.ReasonText
+                                    order by HaltTime desc";
            SqlParameter parameter = new SqlParameter("organizationId", organizationId);
            DataTable originalTable = dataFactory.Query(mySql, parameter);
 
@@ -107,30 +112,33 @@ namespace StatisticalAlarm.Service.HaltAlarmService
        {
            string connectionString = ConnectionStringFactory.NXJCConnectionString;
            ISqlServerDataFactory dataFactory = new SqlServerDataFactory(connectionString);
-           string mySql = @"select A.OrganizationID,C.Name,B.MasterEquipmentName,B.MasterLabel,B.EquipmentName as SlaveEquipmentName,B.Label as SlaveLabel,
-                                    '从机延时停机' as Type,B.WarmingTime as HaltTime,B.ReasonText,B.MasterHaltTime as time
+           string mySql = @"select A.OrganizationID,RecoverTime=NULL,C.Name,B.MasterEquipmentName,B.MasterLabel,B.EquipmentName as SlaveEquipmentName,B.Label as SlaveLabel,
+                                    '从机延时停机' as Type,B.SlaveStopTime as HaltTime,B.ReasonText,B.MasterHaltTime as time,E.[TimeDelay] as TimeDelay
                                     from [dbo].[shift_MachineHaltLog] A,[dbo].[shift_SlaverHaltDelayAlarmLog] B,system_Organization C,
-                                    (select LevelCode from system_Organization where OrganizationID=@organizationId) D
+                                    (select LevelCode from system_Organization where OrganizationID=@organizationId) D,[dbo].[system_SlaveMachineDescription] E
                                     where A.MachineHaltLogID=B.KeyID
                                     and A.OrganizationID=C.OrganizationID
                                     and A.HaltTime=B.MasterHaltTime
                                     and C.LevelCode like D.LevelCode+'%'
                                     and B.MasterHaltTime>=@startTime
                                     and B.MasterHaltTime<=@endTime
-                                    group by B.MasterHaltTime,B.WarmingTime,A.OrganizationID,C.Name,B.MasterEquipmentName,B.MasterLabel,B.EquipmentName,B.Label,B.ReasonText
+                                    and E.[VariableName]=B.[Label] 
+                                    and E.[OrganizationID]=B.[OrganizationID]    
+                                    group by B.MasterHaltTime,B.SlaveStopTime,A.OrganizationID,C.Name,B.MasterEquipmentName,B.MasterLabel,B.EquipmentName,B.Label,B.ReasonText,E.[TimeDelay]
                                     union all
-                                    select A.OrganizationID,B.Name,A.EquipmentName as MasterEquipmentName,A.Label as MasterLabel,'无' as SlaveEquipmentName,
-                                    '无' as SlaveLabel,'主机停机' as Type,A.HaltTime as HaltTime,A.ReasonText,A.HaltTime as time
+                                    select A.OrganizationID,A.RecoverTime as RecoverTime,B.Name,A.EquipmentName as MasterEquipmentName,A.Label as MasterLabel,'无' as SlaveEquipmentName,
+                                    '无' as SlaveLabel,'主机停机' as Type,A.HaltTime as HaltTime,A.ReasonText,A.HaltTime as time,NUll as TimeDelay
                                     from [dbo].[shift_MachineHaltLog] A,system_Organization B,
                                     (select LevelCode from system_Organization where OrganizationID=@organizationId) C
                                     where A.OrganizationID=B.OrganizationID
                                     and B.LevelCode like C.LevelCode+'%'
                                     and A.HaltTime>=@startTime
                                     and A.HaltTime<=@endTime
-                                    group by A.HaltTime,A.OrganizationID,B.Name,A.EquipmentName,A.Label,A.ReasonText
+                                    group by A.HaltTime,A.RecoverTime,A.OrganizationID,B.Name,A.EquipmentName,A.Label,A.ReasonText
                                     order by HaltTime desc,MasterEquipmentName";
            SqlParameter[] parameters = { new SqlParameter("organizationId", organizationId), 
-                                            new SqlParameter("startTime", startTime), new SqlParameter("endTime", endTime) };
+                                         new SqlParameter("startTime", startTime), 
+                                         new SqlParameter("endTime", endTime) };
            DataTable originalTable = dataFactory.Query(mySql, parameters);
            DataColumn levelColumn = new DataColumn("LevelCode", typeof(string));
            originalTable.Columns.Add(levelColumn);
@@ -187,10 +195,10 @@ namespace StatisticalAlarm.Service.HaltAlarmService
        {
            string connectionString = ConnectionStringFactory.NXJCConnectionString;
            ISqlServerDataFactory dataFactory = new SqlServerDataFactory(connectionString);
-           string mySql = @"select A.OrganizationID,C.Name,B.MasterEquipmentName,B.MasterLabel,B.EquipmentName as SlaveEquipmentName,B.Label as SlaveLabel,
-                                    '从机延时停机' as Type,B.WarmingTime as HaltTime,B.ReasonText,B.MasterHaltTime as time
+           string mySql = @"select A.OrganizationID,RecoverTime=NULL,C.Name,B.MasterEquipmentName,B.MasterLabel,B.EquipmentName as SlaveEquipmentName,B.Label as SlaveLabel,
+                                    '从机延时停机' as Type,B.SlaveStopTime as HaltTime,B.ReasonText,B.MasterHaltTime as time,F.[TimeDelay] as TimeDelay
                                     from [dbo].[shift_MachineHaltLog] A,[dbo].[shift_SlaverHaltDelayAlarmLog] B,system_Organization C,
-                                    (select LevelCode from system_Organization where OrganizationID=@organizationId) D
+                                    (select LevelCode from system_Organization where OrganizationID=@organizationId) D,[dbo].[system_SlaveMachineDescription] F
                                     where A.MachineHaltLogID=B.KeyID
                                     and A.OrganizationID=C.OrganizationID
                                     and A.HaltTime=B.MasterHaltTime
@@ -198,10 +206,12 @@ namespace StatisticalAlarm.Service.HaltAlarmService
                                     and B.MasterHaltTime>=@startTime
                                     and B.MasterHaltTime<=@endTime
                                     and B.MasterLabel=@variableId
-                                    group by B.MasterHaltTime,B.WarmingTime,A.OrganizationID,C.Name,B.MasterEquipmentName,B.MasterLabel,B.EquipmentName,B.Label,B.ReasonText
+                                    and F.[VariableName]=B.[Label] 
+                                    and F.[OrganizationID]=B.[OrganizationID]          
+                                    group by B.MasterHaltTime,B.SlaveStopTime,A.OrganizationID,C.Name,B.MasterEquipmentName,B.MasterLabel,B.EquipmentName,B.Label,B.ReasonText,F.[TimeDelay]
                                     union all
-                                    select A.OrganizationID,B.Name,A.EquipmentName as MasterEquipmentName,A.Label as MasterLabel,'无' as SlaveEquipmentName,
-                                    '无' as SlaveLabel,'主机停机' as Type,A.HaltTime as HaltTime,A.ReasonText,A.HaltTime as time
+                                    select A.OrganizationID,A.RecoverTime as RecoverTime,B.Name,A.EquipmentName as MasterEquipmentName,A.Label as MasterLabel,'无' as SlaveEquipmentName,
+                                    '无' as SlaveLabel,'主机停机' as Type,A.HaltTime as HaltTime,A.ReasonText,A.HaltTime as time,NUll as TimeDelay
                                     from [dbo].[shift_MachineHaltLog] A,system_Organization B,
                                     (select LevelCode from system_Organization where OrganizationID=@organizationId) C
                                     where A.OrganizationID=B.OrganizationID
@@ -209,7 +219,7 @@ namespace StatisticalAlarm.Service.HaltAlarmService
                                     and A.HaltTime>=@startTime
                                     and A.HaltTime<=@endTime
                                     and A.Label=@variableId  
-                                    group by A.HaltTime,A.OrganizationID,B.Name,A.EquipmentName,A.Label,A.ReasonText
+                                    group by A.HaltTime,A.RecoverTime,A.OrganizationID,B.Name,A.EquipmentName,A.Label,A.ReasonText
                                     order by HaltTime desc,MasterEquipmentName";
            SqlParameter[] parameters = { new SqlParameter("@organizationId", organizationId), 
                                             new SqlParameter("@variableId", variableId), 

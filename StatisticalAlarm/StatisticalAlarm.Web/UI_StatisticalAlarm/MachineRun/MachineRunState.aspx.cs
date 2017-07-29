@@ -47,10 +47,18 @@ namespace StatisticalAlarm.Web.UI_StatisticalAlarm.MachineRun
             //select VariableDescription,VariableName from [dbo].[system_MasterMachineDescription]  where OrganizationID like 'zc_nxjc_byc_byf%' order by OrganizationID
         }
         [WebMethod]
-        public static string GetHistoryHaltAlarm(string organizationID, string mainMachine, string startTime, string endTime)
+        public static string GetHistoryHaltAlarm(string morganizationID, string mainMachine, string startTime, string endTime)
         {
             //DataTable table = StatisticalAlarm.Service.MachineRunService.MachineRunState.GetHistoryHaltAlarmData(organizationId, startTime, endTime);
-            DataTable table = StatisticalAlarm.Service.MachineRunService.MachineRunState.GetHistoryHaltAlarmData(organizationID, mainMachine, startTime, endTime);
+            DataTable table = StatisticalAlarm.Service.MachineRunService.MachineRunState.GetHistoryHaltAlarmData(morganizationID, mainMachine, startTime, endTime);
+            string json = EasyUIJsonParser.DataGridJsonParser.DataTableToJson(table);
+            return json;
+        }
+        [WebMethod]
+        public static string GetHistoryHaltAlarmAll(string organizationID, string startTime, string endTime)
+        {
+            //DataTable table = StatisticalAlarm.Service.MachineRunService.MachineRunState.GetHistoryHaltAlarmData(organizationId, startTime, endTime);
+            DataTable table = StatisticalAlarm.Service.MachineRunService.MachineRunState.GetHistoryHaltAlarmDataAll(organizationID, startTime, endTime);
             string json = EasyUIJsonParser.DataGridJsonParser.DataTableToJson(table);
             return json;
         }
