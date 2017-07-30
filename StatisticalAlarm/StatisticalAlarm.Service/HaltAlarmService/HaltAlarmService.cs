@@ -52,7 +52,8 @@ namespace StatisticalAlarm.Service.HaltAlarmService
                                          system_TenDaysRealtimeAlarm D
                                     where D.AlarmType='MachineHalt'
                                      and D.OrganizationID=B.OrganizationID                                                                     
-                                     and D.KeyId=A.MachineHaltLogID                                   
+                                     and D.KeyId=A.MachineHaltLogID
+                                     and A.[RecoverTime] is NULL                                                           
                                     and B.LevelCode like C.LevelCode+'%'                       
                                     group by A.HaltTime,D.AlarmDateTime,A.RecoverTime,A.OrganizationID,B.Name,A.EquipmentName,A.Label,A.ReasonText
                                     order by HaltTime desc";
