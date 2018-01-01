@@ -17,7 +17,7 @@ function loadDataGrid(type, myData) {
         $('#gridMain_ReportTemplate').datagrid({
             columns: [[
                     { field: 'EquipmentName', title: '主机名称', width: 120 },
-                    { field: 'Name', title: '产线', width: 60 },
+                    { field: 'Name', title: '产线', width: 65 },
                     //{ field: 'Count', title: '运行次数', width: 80 },
                     { field: 'StartTime', title: '开机时间', width: 130 },                  
                     {

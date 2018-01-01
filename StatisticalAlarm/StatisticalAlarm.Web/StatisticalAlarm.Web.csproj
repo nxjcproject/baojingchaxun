@@ -39,9 +39,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EasyUIJsonParser, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\EasyUIJsonParser\EasyUIJsonParser\bin\Debug\EasyUIJsonParser.dll</HintPath>
+    <Reference Include="EasyUIJsonParser">
+      <HintPath>..\StatisticalAlarm.Service\bin\Debug\EasyUIJsonParser.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -61,16 +60,19 @@
     <Reference Include="System.Xml.Linq" />
     <Reference Include="WebStyleBaseForEnergy, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\WebStyleBaseForEnergy_开发用\WebStyleBaseForEnergy\bin\Debug\WebStyleBaseForEnergy.dll</HintPath>
+      <HintPath>bin\WebStyleBaseForEnergy.dll</HintPath>
     </Reference>
-    <Reference Include="WebUserContorls.Web">
-      <HintPath>..\..\..\yuangongkaohe-master\StaffAssessment\StaffAssessment.Web\bin\WebUserContorls.Web.dll</HintPath>
+    <Reference Include="WebUserContorls.Web, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\WebUserContorls.Web.dll</HintPath>
     </Reference>
-    <Reference Include="WebUserControls.Infrastructure">
-      <HintPath>..\..\..\yuangongkaohe-master\StaffAssessment\StaffAssessment.Web\bin\WebUserControls.Infrastructure.dll</HintPath>
+    <Reference Include="WebUserControls.Infrastructure, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\WebUserControls.Infrastructure.dll</HintPath>
     </Reference>
-    <Reference Include="WebUserControls.Service">
-      <HintPath>..\..\..\yuangongkaohe-master\StaffAssessment\StaffAssessment.Web\bin\WebUserControls.Service.dll</HintPath>
+    <Reference Include="WebUserControls.Service, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\WebUserControls.Service.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

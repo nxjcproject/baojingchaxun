@@ -34,29 +34,30 @@
                     <td>
                         <table>
                             <tr>
-                                <td style="width:60px"> 生产线：</td>
+                                <td>组织机构</td>
                                 <td>
                                     <input id="productLineName" class="easyui-textbox" style="width: 100px;" readonly="readonly" /><input id="organizationId" readonly="true" style="display: none;" /></td>
                                 <td >
                                     <input type="radio" id="rdoYearly" name="alarmType" value="realtime" checked="checked" onclick="realtimeAlarm()"/>实时
                                      <input type="radio" id="rdoMonthly" name="alarmType" value="history" onclick="setHistory()"/>历史
-                                </td>                                                               
+                                </td>
+                                <td></td>
+                                <td class="queryDate" style="display:none"><a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-search'"
+                                    onclick="QueryReportFun();">查询</a>
+                                </td>                                                                  
                             </tr>
                             <tr>
-                                <td  class="queryDate" style="display:none;width:60px">开始时间：</td>
+                                <td  class="queryDate" style="display:none;">开始时间</td>
                                 <td class="queryDate" style="display:none">
                                     <input id="startDate" type="text" class="easyui-datetimebox" required="required" style="width: 150px;" />
                                 </td>     
-                                <td class="queryDate" style="display:none">                            
-                                    结束时间：<input id="endDate" type="text" class="easyui-datetimebox" required="required" style="width: 150px;" />
+                                <td class="queryDate" style="display:none;">结束时间
+                                    <input id="endDate" type="text" class="easyui-datetimebox" required="required" style="width: 150px;" />
                                 </td>
-                                <td  class="queryDate" style="display:none;width:80px">主设备名称：</td> 
-                                <td class="queryDate" style="display:none;width:60px">
-                                    <input id="MainMachine" type="text" class="easyui-combobox"  style="width: 150px;" />
-                                </td>
-                                <td class="queryDate" style="display:none"><a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true"
-                                    onclick="QueryReportFun();">查询</a>
-                                </td>               
+                                <td  class="queryDate" style="display:none;">主设备名称</td> 
+                                <td class="queryDate" style="display:none;">
+                                    <input id="MainMachine" type="text" class="easyui-combobox" style="width: 140px;" />
+                                </td>                                           
                             </tr>
                         </table>
                     </td>

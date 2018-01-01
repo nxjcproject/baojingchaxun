@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head id="Head1" runat="server">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>主机停机电耗统计</title>
+    <title>主机停机电量统计</title>
     <link rel="stylesheet" type="text/css" href="/lib/ealib/themes/gray/easyui.css"/>
 	<link rel="stylesheet" type="text/css" href="/lib/ealib/themes/icon.css"/>
     <link rel="stylesheet" type="text/css" href="/lib/extlib/themes/syExtIcon.css"/>
@@ -28,23 +28,23 @@
             <uc1:OrganisationTree ID="OrganisationTree_ProductionLine" runat="server" />
         </div>   
         <!-- 图表开始 -->
-        <div id="toolbar_ReportTemplate" style="height:30px;padding:10px">            
+        <div id="toolbar_ReportTemplate" style="height:30px;padding-top:10px">            
                         <table>
                             <tr>
-                                <td>组织机构：</td>
+                                <td style="width: 50px; text-align: right;">组织机构</td>
                                 <td>
                                     <input id="productLineName" class="easyui-textbox" style="width: 100px;" readonly="true" />
                                     <input id="organizationId" readonly="true" style="display: none;" />
                                 </td>
-                                <td>开始时间：</td>
+                                <td style="width: 50px; text-align: right;">开始时间</td>
                                 <td>
                                     <input id="startDate" type="text" class="easyui-datetimebox" required="required" style="width: 150px;" />
                                 </td>
-                                <td>结束时间：</td>
+                                <td style="width: 50px; text-align: right;">结束时间</td>
                                 <td>
                                     <input id="endDate" type="text" class="easyui-datetimebox" required="required" style="width: 150px;" />
                                 </td>
-                                <td><a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true" onclick="query();">查询</a>
+                                <td><a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-search'" onclick="query();">查询</a>
                                 </td>
                             </tr>
                         </table>       

@@ -96,12 +96,12 @@ function loadDataGrid(type, myData) {
         $('#gridMain_ReportTemplate').datagrid({
             columns: [[
                     { field: 'AlarmDateTime', title: '报警开始时间', width: 130 },
-                    { field: 'Name', title: '工序', width: 180 },
+                    { field: 'Name', title: '工序', width: 200 },
                  ///   { field: 'TimeSpan', title: '报警时间段', width: 200 },
                     { field: 'EnergyConsumptionType', title: '报警类型', width: 70 },
                     { field: 'StandardValue', title: '报警上限', width: 70 },
-                    { field: 'ActualValue', title: '报警实际值', width: 70},
-                    { field: 'Superscale', title: '超标百分比', width: 70 }
+                    { field: 'ActualValue', title: '报警实际值', width: 80},
+                    { field: 'Superscale', title: '超标百分比', width: 80 }
             ]],
             fit: true,
             pagination: true,

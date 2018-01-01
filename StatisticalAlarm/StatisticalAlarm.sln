@@ -2,6 +2,9 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StatisticalAlarm.Web", "StatisticalAlarm.Web\StatisticalAlarm.Web.csproj", "{32CD4C71-A0C6-4BBA-9C78-F1D1DAFE126D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{0AFAB9A5-FAD5-475D-89EC-91E45879367F} = {0AFAB9A5-FAD5-475D-89EC-91E45879367F}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StatisticalAlarm.Infrastructure", "StatisticalAlarm.Infrastructure\StatisticalAlarm.Infrastructure.csproj", "{0AFAB9A5-FAD5-475D-89EC-91E45879367F}"
 EndProject

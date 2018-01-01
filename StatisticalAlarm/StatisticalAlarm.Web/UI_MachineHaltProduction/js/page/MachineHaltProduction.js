@@ -22,10 +22,10 @@ function loadTreeGrid(type, myData) {
     if (type == "first") {
         $('#Windows_Report').treegrid({
             columns: [[
-                    { field: 'text', title: '设备名称', width: 180 },
-                    { field: 'HaltTime', title: '停机时间', width: 130 },
-                    { field: 'RecoverTime', title: '开机时间', width: 130 },
-                    { field: 'HaltSumTime', title: '停机时长', width: 90 },
+                    { field: 'text', title: '设备名称', width: 250 },
+                    { field: 'HaltTime', title: '停机时间', width: 140 },
+                    { field: 'RecoverTime', title: '开机时间', width: 140 },
+                    { field: 'HaltSumTime', title: '停机时长', width: 130 },
                     { field: 'HaltPowerConsumption', title: '电量', width: 80 }
             ]],          
             fit: true,

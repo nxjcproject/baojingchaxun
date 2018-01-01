@@ -28,32 +28,27 @@
         </div>
         <!-- 图表开始 -->
         <div id="toolbar_ReportTemplate" style="display: none;">
-            <div style="margin-left:10px;margin-top:5px;margin-bottom:5px">
-                <span style="margin-right:12px">
-                    生产线:
-                </span>
+            <div style="margin-top:5px;margin-bottom:5px">
+                <span style="padding-left:5px;">组织机构</span>
                 <span>
                     <input id="productLineName" class="easyui-textbox" style="width: 100px;" readonly="readonly" /><input id="organizationId" readonly="readonly" style="display: none;" />
                     <input type="radio" id="Radio1" name="alarmType" value="realtime" checked="checked" onclick="realtimeAlarm()" />实时
                     <input type="radio" id="Radio2" name="alarmType" value="history" onclick="setHistory()" />历史
                 </span>
             </div>
-            <div class="historyTool" style="display: none;margin-left:10px;margin-bottom:5px" >
-                <span>报警类型:</span>
-                <input id="alarmType" class="easyui-combobox" style="width:150px;"/>
-                <span>开始时间:</span>
+            <div class="historyTool" style="display: none; margin-bottom:5px" >
+                <span style="padding-left:5px;">报警类型</span>
+                <input id="alarmType" class="easyui-combobox" style="width:100px;"/>
+                <span style="padding-left:10px;">开始时间</span>
                 <span>
                     <input id="startDate" type="text" class="easyui-datetimebox" required="required" style="width: 150px;" />
                 </span>
-                <span>
-                    结束时间:
-                </span>     
+                <span style="padding-left:10px;">结束时间</span>     
                 <span>
                     <input id="endDate" type="text" class="easyui-datetimebox" required="required" style="width: 150px;" />
                 </span>
                 <span>
-                    <a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true"
-                                    onclick="QueryReportFun();">查询</a>
+                    <a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-search'" onclick="QueryReportFun();">查询</a>
                 </span>
             </div>
         </div>
