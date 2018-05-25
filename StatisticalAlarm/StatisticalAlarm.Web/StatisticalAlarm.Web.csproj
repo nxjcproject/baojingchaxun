@@ -1630,6 +1630,7 @@
     <Content Include="lib\pllib\syntaxhighlighter\LGPL-LICENSE" />
     <Content Include="lib\pllib\syntaxhighlighter\MIT-LICENSE" />
     <None Include="Properties\PublishProfiles\baojingchaxun.pubxml" />
+    <None Include="Properties\PublishProfiles\rEALEASE.pubxml" />
     <None Include="Properties\PublishProfiles\Release.pubxml" />
     <None Include="Properties\PublishProfiles\Release1.pubxml" />
     <None Include="Properties\PublishProfiles\StatisticalAlarm.pubxml" />

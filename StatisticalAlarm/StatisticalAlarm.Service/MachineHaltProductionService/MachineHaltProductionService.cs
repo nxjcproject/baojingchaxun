@@ -28,7 +28,7 @@ namespace StatisticalAlarm.Service.MachineHaltProductionService
 	                                      ,C.KeyId
 	                                      ,D.LevelCode
 	                                      ,G.[MeterDatabase]
-                                      FROM [NXJC].[dbo].[shift_MachineHaltLog] A,[NXJC].[dbo].[equipment_EquipmentDetail] B,[NXJC].[dbo].[tz_Formula] C,[NXJC].[dbo].[formula_FormulaDetail] D,[NXJC].[dbo].[system_Organization] P, [NXJC].[dbo].[system_Database] G
+                                      FROM [shift_MachineHaltLog] A,[equipment_EquipmentDetail] B,[tz_Formula] C,[formula_FormulaDetail] D,[system_Organization] P,[system_Database] G
                                       where A.[OrganizationID]=@mOrganizationId
                                       and ((A.HaltTime>=@startTime and A.RecoverTime<=@endTime)
                                       or (A.HaltTime<=@startTime and RecoverTime>=@startTime)
@@ -42,7 +42,7 @@ namespace StatisticalAlarm.Service.MachineHaltProductionService
                                       and P.OrganizationID=@mOrganizationId
                                       and P.[DatabaseID]=G.[DatabaseID]
                                        )  E
-                                      left join [NXJC].[dbo].[formula_FormulaDetail] F 
+                                      left join [dbo].[formula_FormulaDetail] F 
                                       on F.KeyID=E.KeyID and F.LevelCode like E.LevelCode + '%'
                                       --group by E.EquipmentName,E.StartTime,E.HaltTime,E.RecoverTime,E.VariableId,E.KeyID,E.LevelCode,E.MeterDatabase,F.VariableId,F.LevelCode,F.Name
                                       order by E.[EquipmentName],E.StartTime,E.LevelCode";

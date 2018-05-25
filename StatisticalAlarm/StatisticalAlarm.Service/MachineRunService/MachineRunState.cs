@@ -20,7 +20,7 @@ namespace StatisticalAlarm.Service.MachineRunService
                                 ,A.[EquipmentCommonId]
 	                            ,B.[OrganizationID]+','+B.[VariableName] as Variable
                                 ,B.[VariableDescription]
-                                FROM [NXJC].[dbo].[equipment_EquipmentDetail] A, [NXJC].[dbo].[system_MasterMachineDescription] B
+                                FROM [equipment_EquipmentDetail] A,[system_MasterMachineDescription] B
 	                            where  A.[EquipmentId]=B.[ID] 
 	                              and A.[Enabled]=1
                                   and A.[OrganizationId]=@mOrganizationID
@@ -54,7 +54,7 @@ namespace StatisticalAlarm.Service.MachineRunService
                                   ,[MachineHaltReason]
                                   ,[MachineHaltRecord]
                                   ,[OutputField]
-                              FROM [NXJC].[dbo].[system_MasterMachineDescription]  where ID=@mEquipmentId";
+                              FROM [system_MasterMachineDescription]  where ID=@mEquipmentId";
             SqlParameter param = new SqlParameter("@mEquipmentId", mEquipmentId);
             DataTable Table = dataFactory.Query(mySql, param);
             return Table;

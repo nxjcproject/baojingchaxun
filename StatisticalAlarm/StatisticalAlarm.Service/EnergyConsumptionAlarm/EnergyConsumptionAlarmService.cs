@@ -56,7 +56,7 @@ namespace StatisticalAlarm.Service
                                     ,A.[Superscale]
                                     ,A.[Reason]
                                     ,A.[VariableID]
-                                FROM [NXJC].[dbo].[shift_EnergyConsumptionAlarmLog] A,[NXJC].[dbo].[system_Organization] B
+                                FROM [shift_EnergyConsumptionAlarmLog] A,[system_Organization] B
                                 where A.[OrganizationID]=B.[OrganizationID]
                                 and A.[OrganizationID] like @organizationId+'%'
                                 and (A.[StartTime]>=@startTime and A.[StartTime]<=@endTime)
