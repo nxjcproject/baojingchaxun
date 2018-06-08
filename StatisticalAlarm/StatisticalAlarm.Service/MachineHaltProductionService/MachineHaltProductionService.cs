@@ -65,7 +65,7 @@ namespace StatisticalAlarm.Service.MachineHaltProductionService
             for (int i = 0; i < texttable.Rows.Count; i++)
             {
                 string equipmentId = texttable.Rows[i]["EquipmentID"].ToString().Trim();
-                string newName=texttable.Rows[i]["EquipmentName"].ToString().Trim();
+                string newName = texttable.Rows[i]["EquipmentName"].ToString().Trim();
                 string equipmentName = texttable.Rows[i]["text"].ToString().Trim();            
                 string variableid = texttable.Rows[i]["VariableId"].ToString().Trim();
                 string dataBase = texttable.Rows[i]["MeterDatabase"].ToString().Trim();
@@ -93,19 +93,33 @@ namespace StatisticalAlarm.Service.MachineHaltProductionService
                 {
                     sqltable = "[HistoryMainMachineFormulaValue]";
                 }
-                string mmsql = @"SELECT cast(sum([FormulaValue]) as decimal(18,2)) as HaltPowerConsumption from {0}.[dbo].{1}
+                /////////////20180608闫潇华 因运行信号和电量采集的周期不同，在计算电量时将停机时间延后10分钟，若延迟后大于开机时间则不计算，记为0 修改开始//////////////////
+                string mHaltFormulaCount;  //停机电量
+                DateTime mActualComputeHaltTime = Convert.ToDateTime(halttime).AddMinutes(10);
+                DateTime mActualComputeRecoverTime = Convert.ToDateTime(retime);
+                mActualComputeHaltTime.AddMinutes(10);
+                mActualComputeHaltTime.AddMinutes(10);
+                if (DateTime.Compare(mActualComputeHaltTime, mActualComputeRecoverTime) > 0)
+                {
+                    mHaltFormulaCount = "0.00";
+                }
+                else
+                {
+                    string mmsql = @"SELECT cast(sum([FormulaValue]) as decimal(18,2)) as HaltPowerConsumption from {0}.[dbo].{1}
                                   where [OrganizationID]=@mOrganizationId
                                         and VariableID=@variableid
-                                        and vDate>=@halttime
-                                        and vDate<=@retime";
-                SqlParameter[] ppara ={
+                                        and vDate>=@mActualComputeHaltTime
+                                        and vDate<=@mActualComputeRecoverTime";
+                    SqlParameter[] ppara ={
                                  new SqlParameter("@mOrganizationId",mOrganizationId),
                                  new SqlParameter("@variableid",variableid),
-                                 new SqlParameter("@halttime",halttime),
-                                 new SqlParameter ("@retime",retime)
+                                 new SqlParameter("@mActualComputeHaltTime",mActualComputeHaltTime),
+                                 new SqlParameter ("@mActualComputeRecoverTime",mActualComputeRecoverTime)
                                  };
-                DataTable ftable = dataFactory.Query(string.Format(mmsql, dataBase,sqltable), ppara);//电量
-                string haltpowerConsumption = ftable.Rows[0]["HaltPowerConsumption"].ToString().Trim();
+                    DataTable ftable = dataFactory.Query(string.Format(mmsql, dataBase, sqltable), ppara);
+                    mHaltFormulaCount = ftable.Rows[0]["HaltPowerConsumption"].ToString().Trim();
+                }
+                /////////////20180608闫潇华 因运行信号和电量采集的周期不同，在计算电量时将停机时间延后10分钟，若延迟后大于开机时间则不计算，记为0 修改结束//////////////////                
                 DataRow dr = table.NewRow();
                 dr["EquipmentID"] = equipmentId;
                 dr["EquipmentName"]=newName;
@@ -113,8 +127,7 @@ namespace StatisticalAlarm.Service.MachineHaltProductionService
                 dr["HaltTime"] = halttime;
                 dr["RecoverTime"] = retime;
                 dr["HaltSumTime"] = haltsumTime;
-                //dr["HaltProduction"] = haltProduction;
-                dr["HaltPowerConsumption"] = haltpowerConsumption;
+                dr["HaltPowerConsumption"] = mHaltFormulaCount;
                 dr["id"] = nodeId;
                 dr["ParentNodeId"] = parentId;
                 table.Rows.Add(dr);
@@ -153,21 +166,7 @@ namespace StatisticalAlarm.Service.MachineHaltProductionService
                 table.Rows.InsertAt(newRow,0);
                 i = i + length +1;
             }
-            //Dictionary<string, decimal[]> aaa = new Dictionary<string, decimal[]>();
-            //string bb = "fg";
-            //if (!aaa.ContainsKey(bb))
-            //{
-            //    aaa.Add(bb, 33.22m);
-            //}
-            //else
-            //{
-            //    deciaml[] adfad = new deciaml[2];
-            //    aaa[bb] = aaa[bb][0] + 22.12m;
-            //}
-            //foreach (string key in aaa.Keys)
-            //{
-            //    decimal[] bafasdf = aaa[key];
-            //}
+
             DataColumn stateColumn = new DataColumn("state", typeof(string));
             table.Columns.Add(stateColumn);
             //此处代码是控制树开与闭的
