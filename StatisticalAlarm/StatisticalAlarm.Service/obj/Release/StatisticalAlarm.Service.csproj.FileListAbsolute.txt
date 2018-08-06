@@ -1,0 +1,8 @@
+C:\Users\Administrator\Desktop\baojingchaxun\StatisticalAlarm\StatisticalAlarm.Service\bin\Release\StatisticalAlarm.Service.dll
+C:\Users\Administrator\Desktop\baojingchaxun\StatisticalAlarm\StatisticalAlarm.Service\bin\Release\StatisticalAlarm.Service.pdb
+C:\Users\Administrator\Desktop\baojingchaxun\StatisticalAlarm\StatisticalAlarm.Service\bin\Release\SqlServerDataAdapter.dll
+C:\Users\Administrator\Desktop\baojingchaxun\StatisticalAlarm\StatisticalAlarm.Service\bin\Release\StatisticalAlarm.Infrastructure.dll
+C:\Users\Administrator\Desktop\baojingchaxun\StatisticalAlarm\StatisticalAlarm.Service\bin\Release\StatisticalAlarm.Infrastructure.pdb
+C:\Users\Administrator\Desktop\baojingchaxun\StatisticalAlarm\StatisticalAlarm.Service\obj\Release\StatisticalAlarm.Service.csprojResolveAssemblyReference.cache
+C:\Users\Administrator\Desktop\baojingchaxun\StatisticalAlarm\StatisticalAlarm.Service\obj\Release\StatisticalAlarm.Service.dll
+C:\Users\Administrator\Desktop\baojingchaxun\StatisticalAlarm\StatisticalAlarm.Service\obj\Release\StatisticalAlarm.Service.pdb

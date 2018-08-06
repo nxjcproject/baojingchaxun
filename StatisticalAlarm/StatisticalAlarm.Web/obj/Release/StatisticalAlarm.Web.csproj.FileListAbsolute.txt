@@ -1,0 +1,12 @@
+C:\Users\Administrator\Desktop\baojingchaxun\StatisticalAlarm\StatisticalAlarm.Web\bin\StatisticalAlarm.Web.dll
+C:\Users\Administrator\Desktop\baojingchaxun\StatisticalAlarm\StatisticalAlarm.Web\bin\StatisticalAlarm.Web.pdb
+C:\Users\Administrator\Desktop\baojingchaxun\StatisticalAlarm\StatisticalAlarm.Web\bin\EasyUIJsonParser.dll
+C:\Users\Administrator\Desktop\baojingchaxun\StatisticalAlarm\StatisticalAlarm.Web\bin\StatisticalAlarm.Service.dll
+C:\Users\Administrator\Desktop\baojingchaxun\StatisticalAlarm\StatisticalAlarm.Web\bin\StatisticalAlarm.Infrastructure.dll
+C:\Users\Administrator\Desktop\baojingchaxun\StatisticalAlarm\StatisticalAlarm.Web\bin\SqlServerDataAdapter.dll
+C:\Users\Administrator\Desktop\baojingchaxun\StatisticalAlarm\StatisticalAlarm.Web\bin\InternalMemeryRestore.dll
+C:\Users\Administrator\Desktop\baojingchaxun\StatisticalAlarm\StatisticalAlarm.Web\bin\StatisticalAlarm.Service.pdb
+C:\Users\Administrator\Desktop\baojingchaxun\StatisticalAlarm\StatisticalAlarm.Web\bin\StatisticalAlarm.Infrastructure.pdb
+C:\Users\Administrator\Desktop\baojingchaxun\StatisticalAlarm\StatisticalAlarm.Web\obj\Release\StatisticalAlarm.Web.csprojResolveAssemblyReference.cache
+C:\Users\Administrator\Desktop\baojingchaxun\StatisticalAlarm\StatisticalAlarm.Web\obj\Release\StatisticalAlarm.Web.dll
+C:\Users\Administrator\Desktop\baojingchaxun\StatisticalAlarm\StatisticalAlarm.Web\obj\Release\StatisticalAlarm.Web.pdb

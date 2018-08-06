@@ -16,14 +16,15 @@ namespace StatisticalAlarm.Service.MachineRunService
             string connectionString = ConnectionStringFactory.NXJCConnectionString;
             ISqlServerDataFactory dataFactory = new SqlServerDataFactory(connectionString);
             string mySql = @" SELECT A.[EquipmentId]
-                                ,A.[EquipmentName]
-                                ,A.[EquipmentCommonId]
-	                            ,B.[OrganizationID]+','+B.[VariableName] as Variable
-                                ,B.[VariableDescription]
+                                    ,A.[EquipmentName]
+                                    ,A.[EquipmentCommonId]
+	                                ,B.[OrganizationID]+','+B.[VariableName] as Variable
+                                    ,B.[VariableDescription]
                                 FROM [equipment_EquipmentDetail] A,[system_MasterMachineDescription] B
-	                            where  A.[EquipmentId]=B.[ID] 
-	                              and A.[Enabled]=1
-                                  and A.[OrganizationId]=@mOrganizationID
+	                           where A.[EquipmentId] = B.[ID] 
+	                             and A.[Enabled] = 1
+                                 and A.[OrganizationId] = @mOrganizationID
+                                 and A.[EquipmentCommonId] in ('RawMaterialsGrind','RotaryKiln','CementGrind','CoalGrind') --20180806闫潇华添加，限制四大主机 
 	                            order by A.DisplayIndex  ";
             SqlParameter param = new SqlParameter("@mOrganizationID", mOrganizationID);
             DataTable Table = dataFactory.Query(mySql, param);
@@ -36,29 +37,7 @@ namespace StatisticalAlarm.Service.MachineRunService
             Table.Rows.InsertAt(dr, 0);
             return Table;
         }
-        public static DataTable GetMainMachineList(string mEquipmentId) 
-        {
-            string connectionString = ConnectionStringFactory.NXJCConnectionString;
-            ISqlServerDataFactory dataFactory = new SqlServerDataFactory(connectionString);
-            string mySql = @"SELECT [ID]
-                                  ,[OrganizationID]
-                                  ,[VariableID]
-                                  ,[VariableName]
-                                  ,[VariableDescription]
-                                  ,[DataBaseName]
-                                  ,[TableName]
-                                  ,[Record]
-                                  ,[ValidValues]
-                                  ,[Remarks]
-                                  ,[KeyID]
-                                  ,[MachineHaltReason]
-                                  ,[MachineHaltRecord]
-                                  ,[OutputField]
-                              FROM [system_MasterMachineDescription]  where ID=@mEquipmentId";
-            SqlParameter param = new SqlParameter("@mEquipmentId", mEquipmentId);
-            DataTable Table = dataFactory.Query(mySql, param);
-            return Table;
-        }
+        
         public static DataTable GetHistoryHaltAlarmData(string morganizationId, string MainMachine, string startTime, string endTime)
         {
             string connectionString = ConnectionStringFactory.NXJCConnectionString;
@@ -71,7 +50,7 @@ namespace StatisticalAlarm.Service.MachineRunService
 							-(DATEDIFF(Minute,A.HaltTime,A.RecoverTime)/60
 							-DATEDIFF(MINUTE,A.HaltTime,A.RecoverTime)/60/24*24)*60)+'分' 
 							as StopTime
-                            from [dbo].[shift_MachineHaltLog] A,system_Organization B
+                            from [dbo].[shift_MachineHaltLog] A
                             where A.OrganizationID=B.OrganizationID
 							and A.OrganizationID=@organizationId
                             and ((A.StartTime>=@startTime and A.StartTime<=@endTime)
@@ -135,11 +114,13 @@ namespace StatisticalAlarm.Service.MachineRunService
 							-(DATEDIFF(Minute,A.HaltTime,A.RecoverTime)/60
 							-DATEDIFF(MINUTE,A.HaltTime,A.RecoverTime)/60/24*24)*60)+'分' 
 							as StopTime
-                            from [dbo].[shift_MachineHaltLog] A,system_Organization B
+                            from [dbo].[shift_MachineHaltLog] A, system_Organization B, equipment_EquipmentDetail C
                             where A.OrganizationID=B.OrganizationID
 							and A.OrganizationID like @organizationID+'%'
-                            and A.StartTime>=@startTime
-                            and A.StartTime<=@endTime                           
+                            and ((A.StartTime>=@startTime and A.StartTime<=@endTime)
+                                  or (A.HaltTime>=@startTime and A.HaltTime<=@endTime))
+                            and A.EquipmentID = C.EquipmentId 
+                            and C.EquipmentCommonId in ('RawMaterialsGrind','RotaryKiln','CementGrind','CoalGrind') --20180806闫潇华添加，限制四大主机                   
                             group by A.EquipmentName,A.StartTime,A.HaltTime,A.OrganizationID,LevelCode,B.Name,A.Label,A.ReasonText,Type,A.RecoverTime,A.Remarks  		                              									 
 							order by EquipmentName,StartTime desc";
             SqlParameter[] parameters = {   new SqlParameter("@organizationID",organizationID),

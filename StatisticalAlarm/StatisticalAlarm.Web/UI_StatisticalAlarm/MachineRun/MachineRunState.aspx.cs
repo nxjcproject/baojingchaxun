@@ -28,36 +28,26 @@ namespace StatisticalAlarm.Web.UI_StatisticalAlarm.MachineRun
                 this.OrganisationTree_ProductionLine.LeveDepth = 5;
             }
         }
-        [WebMethod]
 
+        [WebMethod]
         public static string MainMachineClassList(string mOrganizationID) 
         {
             DataTable table = StatisticalAlarm.Service.MachineRunService.MachineRunState.GetMainMachineClassList(mOrganizationID);
             string json = EasyUIJsonParser.DataGridJsonParser.DataTableToJson(table);
             return json;      
-            //select VariableDescription,VariableName from [dbo].[system_MasterMachineDescription]  where OrganizationID like 'zc_nxjc_byc_byf%' order by OrganizationID
         }
-        [WebMethod]
-
-        public static string MainMachineList(string mEquipmentId)
-        {
-            DataTable table = StatisticalAlarm.Service.MachineRunService.MachineRunState.GetMainMachineList(mEquipmentId);
-            string json = EasyUIJsonParser.DataGridJsonParser.DataTableToJson(table);
-            return json;
-            //select VariableDescription,VariableName from [dbo].[system_MasterMachineDescription]  where OrganizationID like 'zc_nxjc_byc_byf%' order by OrganizationID
-        }
+        
         [WebMethod]
         public static string GetHistoryHaltAlarm(string morganizationID, string mainMachine, string startTime, string endTime)
         {
-            //DataTable table = StatisticalAlarm.Service.MachineRunService.MachineRunState.GetHistoryHaltAlarmData(organizationId, startTime, endTime);
             DataTable table = StatisticalAlarm.Service.MachineRunService.MachineRunState.GetHistoryHaltAlarmData(morganizationID, mainMachine, startTime, endTime);
             string json = EasyUIJsonParser.DataGridJsonParser.DataTableToJson(table);
             return json;
         }
+
         [WebMethod]
         public static string GetHistoryHaltAlarmAll(string organizationID, string startTime, string endTime)
         {
-            //DataTable table = StatisticalAlarm.Service.MachineRunService.MachineRunState.GetHistoryHaltAlarmData(organizationId, startTime, endTime);
             DataTable table = StatisticalAlarm.Service.MachineRunService.MachineRunState.GetHistoryHaltAlarmDataAll(organizationID, startTime, endTime);
             string json = EasyUIJsonParser.DataGridJsonParser.DataTableToJson(table);
             return json;
