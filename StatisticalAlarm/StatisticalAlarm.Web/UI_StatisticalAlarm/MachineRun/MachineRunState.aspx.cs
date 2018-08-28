@@ -38,9 +38,9 @@ namespace StatisticalAlarm.Web.UI_StatisticalAlarm.MachineRun
         }
         
         [WebMethod]
-        public static string GetHistoryHaltAlarm(string morganizationID, string mainMachine, string startTime, string endTime)
+        public static string GetHistoryHaltAlarm(string morganizationID, string mEquipmentId, string startTime, string endTime)
         {
-            DataTable table = StatisticalAlarm.Service.MachineRunService.MachineRunState.GetHistoryHaltAlarmData(morganizationID, mainMachine, startTime, endTime);
+            DataTable table = StatisticalAlarm.Service.MachineRunService.MachineRunState.GetHistoryHaltAlarmData(morganizationID, mEquipmentId, startTime, endTime);
             string json = EasyUIJsonParser.DataGridJsonParser.DataTableToJson(table);
             return json;
         }

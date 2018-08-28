@@ -19,11 +19,11 @@ function loadDataGrid(type, myData) {
                     { field: 'EquipmentName', title: '主机名称', width: 120 },
                     { field: 'Name', title: '产线', width: 65 },
                     //{ field: 'Count', title: '运行次数', width: 80 },
-                    { field: 'StartTime', title: '开机时间', width: 130 },                  
+                    { field: 'StartTime', title: '开机时间', width: 130 },
                     {
                         field: 'HaltTime', title: '停机时间', width: 130, formatter: function (value, row, index) {
-                            if (row.StartTime != "" && row.HaltTime=="") {
-                                return value="正在运行...";
+                            if (row.StartTime != "" && row.HaltTime == "") {
+                                return value = "正在运行...";
                             } else {
                                 return value;
                             }
@@ -55,7 +55,7 @@ function loadDataGrid(type, myData) {
     else {
         $('#gridMain_ReportTemplate').datagrid({ data: [] });
         $('#gridMain_ReportTemplate').datagrid('loadData', myData);
-       // $('#gridMain_ReportTemplate').datagrid("collapseAll");
+        // $('#gridMain_ReportTemplate').datagrid("collapseAll");
     }
 }
 var organizationID = "";
@@ -66,9 +66,8 @@ function onOrganisationTreeClick(node) {
 
     LoadMainMachineClassList(organizationID);
 }
-//var equipmentId = "";
+var mEquipmentId = "";
 var mOrganizationID = "";
-var variableName = "";
 var equipmentName = "";
 function LoadMainMachineClassList(organizationID) {
     $.ajax({
@@ -81,18 +80,16 @@ function LoadMainMachineClassList(organizationID) {
             m_MsgData = jQuery.parseJSON(msg.d);
             $('#EquipmentName').combobox({
                 data: m_MsgData.rows,
-                valueField: 'Variable',
+                valueField: 'EquipmentId',
                 textField: 'EquipmentName',
                 onSelect: function (param) {
                     equipmentName = param.EquipmentName;
-                    var mVariable = param.Variable;
-                    var arrVariable = mVariable.split(',');
-                    mOrganizationID = arrVariable[0];
-                   variableName = arrVariable[1];               
+                    mOrganizationID = param.OrganizationID;
+                    mEquipmentId = param.EquipmentId;
                 }
             });
             if (m_MsgData.rows != undefined && m_MsgData.rows.length > 0) {
-                $('#EquipmentName').combobox("setValue", m_MsgData.rows[0].Variable);
+                $('#EquipmentName').combobox("setValue", m_MsgData.rows[0].EquipmentId);
                 equipmentName = m_MsgData.rows[0].EquipmentName;
             }
         }
@@ -115,40 +112,40 @@ function QueryReportFun() {
         title: '请稍后',
         msg: '数据载入中...'
     });
-    var Url="";
-    var Data="";
+    var Url = "";
+    var Data = "";
     if (equipmentName == "全部") {
         Url = "MachineRunState.aspx/GetHistoryHaltAlarmAll";
         Data = '{organizationID: "' + organizationID + '", startTime: "' + startTime + '", endTime: "' + endTime + '"}';
     }
     else {
         Url = "MachineRunState.aspx/GetHistoryHaltAlarm";
-        Data = '{morganizationID: "' + mOrganizationID + '", mainMachine: "' + variableName + '", startTime: "' + startTime + '", endTime: "' + endTime + '"}';
+        Data = '{morganizationID: "' + mOrganizationID + '", mEquipmentId: "' + mEquipmentId + '", startTime: "' + startTime + '", endTime: "' + endTime + '"}';
     }
-        $.ajax({
-            type: "POST",
-            url: Url,
-            data: Data,
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            success: function (msg) {
-                $.messager.progress('close');
-                m_MsgData = jQuery.parseJSON(msg.d);
-                if (m_MsgData.total == 0) {
-                    $('#gridMain_ReportTemplate').datagrid('loadData', []);
-                    $.messager.alert('提示', '没有相关数据！');
-                }
-                else {
-                    loadDataGrid("last", m_MsgData);
-                }
-            },
-            beforeSend: function (XMLHttpRequest) {
-                win;
-            },
-            error: function handleError() {
-                $.messager.progress('close');
+    $.ajax({
+        type: "POST",
+        url: Url,
+        data: Data,
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (msg) {
+            $.messager.progress('close');
+            m_MsgData = jQuery.parseJSON(msg.d);
+            if (m_MsgData.total == 0) {
                 $('#gridMain_ReportTemplate').datagrid('loadData', []);
-                $.messager.alert('失败', '获取数据失败');
+                $.messager.alert('提示', '没有相关数据！');
             }
-        });
+            else {
+                $('#gridMain_ReportTemplate').datagrid('loadData', m_MsgData);
+            }
+        },
+        beforeSend: function (XMLHttpRequest) {
+            win;
+        },
+        error: function handleError() {
+            $.messager.progress('close');
+            $('#gridMain_ReportTemplate').datagrid('loadData', []);
+            $.messager.alert('失败', '获取数据失败');
+        }
+    });
 }

@@ -18,7 +18,7 @@ namespace StatisticalAlarm.Service.MachineRunService
             string mySql = @" SELECT A.[EquipmentId]
                                     ,A.[EquipmentName]
                                     ,A.[EquipmentCommonId]
-	                                ,B.[OrganizationID]+','+B.[VariableName] as Variable
+	                                ,B.[OrganizationID]
                                     ,B.[VariableDescription]
                                 FROM [equipment_EquipmentDetail] A,[system_MasterMachineDescription] B
 	                           where A.[EquipmentId] = B.[ID] 
@@ -29,20 +29,20 @@ namespace StatisticalAlarm.Service.MachineRunService
             SqlParameter param = new SqlParameter("@mOrganizationID", mOrganizationID);
             DataTable Table = dataFactory.Query(mySql, param);
             DataRow dr = Table.NewRow();
-            dr["EquipmentId"] = "";
+            dr["EquipmentId"] = "1";
             dr["EquipmentName"] = "全部";
             dr["EquipmentCommonId"] = "";
-            dr["Variable"] = Table.Rows[0]["Variable"] + "1";//+1仅是为了使全部唯一标识
+            dr["OrganizationID"] = "";
             dr["VariableDescription"] = "";
             Table.Rows.InsertAt(dr, 0);
             return Table;
         }
-        
-        public static DataTable GetHistoryHaltAlarmData(string morganizationId, string MainMachine, string startTime, string endTime)
+
+        public static DataTable GetHistoryHaltAlarmData(string morganizationId, string mEquipmentId, string startTime, string endTime)
         {
             string connectionString = ConnectionStringFactory.NXJCConnectionString;
             ISqlServerDataFactory dataFactory = new SqlServerDataFactory(connectionString);
-            string mySql = @"select A.OrganizationID as LevelCode,'LeafNode' as Type,B.Name,A.EquipmentName,A.Label as MasterLabel,A.StartTime as StartTime,A.ReasonText,A.HaltTime as HaltTime,A.RecoverTime,A.Remarks,
+            string mySql = @"select A.OrganizationID as LevelCode,'LeafNode' as Type,B.Name,A.EquipmentName,A.EquipmentID,A.StartTime as StartTime,A.ReasonText,A.HaltTime as HaltTime,A.RecoverTime,A.Remarks,
                             convert(varchar,DATEDIFF(MINUTE,A.StartTime,A.HaltTime)/60/24)+'天'+convert(varchar,DATEDIFF(Minute,A.StartTime,A.HaltTime)/60-DATEDIFF(MINUTE,A.StartTime,A.HaltTime)/60/24*24)+'时'+convert(varchar,DATEDIFF(minute,A.StartTime,A.HaltTime)-DATEDIFF(minute,A.StartTime,A.HaltTime)/60/24*24*60-(DATEDIFF(Minute,A.StartTime,A.HaltTime)/60-DATEDIFF(MINUTE,A.StartTime,A.HaltTime)/60/24*24)*60)+'分' as RunTime,
                             convert(varchar,DATEDIFF(MINUTE,A.HaltTime,A.RecoverTime)/60/24)+'天'+
 							convert(varchar,DATEDIFF(Minute,A.HaltTime,A.RecoverTime)/60-DATEDIFF(MINUTE,A.HaltTime,A.RecoverTime)/60/24*24)+'时'+
@@ -50,18 +50,18 @@ namespace StatisticalAlarm.Service.MachineRunService
 							-(DATEDIFF(Minute,A.HaltTime,A.RecoverTime)/60
 							-DATEDIFF(MINUTE,A.HaltTime,A.RecoverTime)/60/24*24)*60)+'分' 
 							as StopTime
-                            from [dbo].[shift_MachineHaltLog] A
+                            from [dbo].[shift_MachineHaltLog] A, system_Organization B
                             where A.OrganizationID=B.OrganizationID
 							and A.OrganizationID=@organizationId
                             and ((A.StartTime>=@startTime and A.StartTime<=@endTime)
                                   or (A.HaltTime>=@startTime and A.HaltTime<=@endTime))
-                            and A.Label=@mainMachine
-                            group by A.EquipmentName,A.StartTime,A.HaltTime,A.OrganizationID,LevelCode,B.Name,A.Label,A.ReasonText,Type,A.RecoverTime,A.Remarks  		                              									 
+                            and A.EquipmentID=@mEquipmentId
+                            group by A.EquipmentName,A.StartTime,A.HaltTime,A.OrganizationID,LevelCode,B.Name,A.EquipmentID,A.ReasonText,Type,A.RecoverTime,A.Remarks  		                              									 
 							order by EquipmentName,StartTime desc";
             SqlParameter[] parameters = { new SqlParameter("@organizationId", morganizationId), 
                                             new SqlParameter("@startTime", startTime),
                                             new SqlParameter("@endTime", endTime),
-                                            new SqlParameter("@mainMachine", MainMachine) 
+                                            new SqlParameter("@mEquipmentId", mEquipmentId) 
                                         };
             DataTable originalTable = dataFactory.Query(mySql, parameters);
             int length = originalTable.Rows.Count;
@@ -93,7 +93,7 @@ namespace StatisticalAlarm.Service.MachineRunService
             }
             else
             {
-                DataRow[] rows = originalTable.Select("LevelCode='" + morganizationId + "'and MasterLabel='" + MainMachine + "'");
+                DataRow[] rows = originalTable.Select("LevelCode='" + morganizationId + "'and EquipmentID='" + mEquipmentId + "'");
                 foreach (DataRow rw in rows)
                 {
                     originalTable.Rows.Remove(rw);
@@ -106,7 +106,7 @@ namespace StatisticalAlarm.Service.MachineRunService
         {
             string connectionString = ConnectionStringFactory.NXJCConnectionString;
             ISqlServerDataFactory dataFactory = new SqlServerDataFactory(connectionString);
-            string mySql = @"select A.OrganizationID as LevelCode,'LeafNode' as Type,B.Name,A.EquipmentName,A.Label as MasterLabel,A.StartTime as StartTime,A.ReasonText,A.HaltTime as HaltTime,A.RecoverTime,A.Remarks,
+            string mySql = @"select A.OrganizationID as LevelCode,'LeafNode' as Type,B.Name,A.EquipmentName,A.EquipmentID,A.StartTime as StartTime,A.ReasonText,A.HaltTime as HaltTime,A.RecoverTime,A.Remarks,
                             convert(varchar,DATEDIFF(MINUTE,A.StartTime,A.HaltTime)/60/24)+'天'+convert(varchar,DATEDIFF(Minute,A.StartTime,A.HaltTime)/60-DATEDIFF(MINUTE,A.StartTime,A.HaltTime)/60/24*24)+'时'+convert(varchar,DATEDIFF(minute,A.StartTime,A.HaltTime)-DATEDIFF(minute,A.StartTime,A.HaltTime)/60/24*24*60-(DATEDIFF(Minute,A.StartTime,A.HaltTime)/60-DATEDIFF(MINUTE,A.StartTime,A.HaltTime)/60/24*24)*60)+'分' as RunTime,
                             convert(varchar,DATEDIFF(MINUTE,A.HaltTime,A.RecoverTime)/60/24)+'天'+
 							convert(varchar,DATEDIFF(Minute,A.HaltTime,A.RecoverTime)/60-DATEDIFF(MINUTE,A.HaltTime,A.RecoverTime)/60/24*24)+'时'+
@@ -121,7 +121,7 @@ namespace StatisticalAlarm.Service.MachineRunService
                                   or (A.HaltTime>=@startTime and A.HaltTime<=@endTime))
                             and A.EquipmentID = C.EquipmentId 
                             and C.EquipmentCommonId in ('RawMaterialsGrind','RotaryKiln','CementGrind','CoalGrind') --20180806闫潇华添加，限制四大主机                   
-                            group by A.EquipmentName,A.StartTime,A.HaltTime,A.OrganizationID,LevelCode,B.Name,A.Label,A.ReasonText,Type,A.RecoverTime,A.Remarks  		                              									 
+                            group by A.EquipmentName,A.StartTime,A.HaltTime,A.OrganizationID,LevelCode,B.Name,A.EquipmentID,A.ReasonText,Type,A.RecoverTime,A.Remarks  		                              									 
 							order by EquipmentName,StartTime desc";
             SqlParameter[] parameters = {   new SqlParameter("@organizationID",organizationID),
                                             new SqlParameter("@startTime", startTime),
