@@ -20,13 +20,13 @@
       <publishTime>07/29/2015 10:56:04</publishTime>
     </File>
     <File Include="bin/StatisticalAlarm.Infrastructure.dll">
-      <publishTime>08/28/2018 09:06:13</publishTime>
+      <publishTime>09/01/2018 14:38:41</publishTime>
     </File>
     <File Include="bin/StatisticalAlarm.Service.dll">
-      <publishTime>08/28/2018 09:06:14</publishTime>
+      <publishTime>09/01/2018 14:38:42</publishTime>
     </File>
     <File Include="bin/StatisticalAlarm.Web.dll">
-      <publishTime>08/28/2018 09:06:15</publishTime>
+      <publishTime>09/01/2018 14:38:42</publishTime>
     </File>
     <File Include="bin/WebStyleBaseForEnergy.dll">
       <publishTime>07/06/2017 16:05:41</publishTime>
@@ -4592,7 +4592,7 @@
       <publishTime>12/25/2017 18:01:14</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>08/28/2018 09:06:20</publishTime>
+      <publishTime>09/01/2018 14:38:47</publishTime>
     </File>
   </ItemGroup>
 </Project>

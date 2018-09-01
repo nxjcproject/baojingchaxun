@@ -37,12 +37,16 @@ namespace StatisticalAlarm.Service.MachineHaltProductionService
                                       and B.EquipmentId=A.EquipmentID
                                       and C.Type=2 and C.ENABLE=1 and C.State=0 
                                       and C.[OrganizationID]=@mOrganizationId
-                                      and D.KeyID=C.KeyId
+                                      and C.KeyID=(SELECT TOP 1 [KeyID]
+                                                   FROM [tz_Formula]
+                                                   WHERE OrganizationID=@mOrganizationId AND ENABLE = 1 AND State = 0 AND CreatedDate <=@endTime 
+                                                   ORDER BY CreatedDate DESC)
+                                      and D.KeyID=C.KeyID 
                                       and D.[VariableId]=B.VariableId
                                       and P.OrganizationID=@mOrganizationId
                                       and P.[DatabaseID]=G.[DatabaseID]
                                        )  E
-                                      left join [dbo].[formula_FormulaDetail] F 
+                                      left join [NXJC_DEV].[dbo].[formula_FormulaDetail] F 
                                       on F.KeyID=E.KeyID and F.LevelCode like E.LevelCode + '%'
                                       --group by E.EquipmentName,E.StartTime,E.HaltTime,E.RecoverTime,E.VariableId,E.KeyID,E.LevelCode,E.MeterDatabase,F.VariableId,F.LevelCode,F.Name
                                       order by E.[EquipmentName],E.StartTime,E.LevelCode";

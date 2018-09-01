@@ -19,3 +19,10 @@ C:\Users\Administrator\Desktop\baojingchaxun\StatisticalAlarm\StatisticalAlarm.S
 C:\Users\Administrator\Desktop\baojingchaxun\StatisticalAlarm\StatisticalAlarm.Service\obj\Debug\StatisticalAlarm.Service.csprojResolveAssemblyReference.cache
 C:\Users\Administrator\Desktop\baojingchaxun\StatisticalAlarm\StatisticalAlarm.Service\obj\Debug\StatisticalAlarm.Service.dll
 C:\Users\Administrator\Desktop\baojingchaxun\StatisticalAlarm\StatisticalAlarm.Service\obj\Debug\StatisticalAlarm.Service.pdb
+G:\工作\研二项目工作\宁夏出差2018.7.30\baojingchaxun\StatisticalAlarm\StatisticalAlarm.Service\bin\Debug\StatisticalAlarm.Service.dll
+G:\工作\研二项目工作\宁夏出差2018.7.30\baojingchaxun\StatisticalAlarm\StatisticalAlarm.Service\bin\Debug\StatisticalAlarm.Service.pdb
+G:\工作\研二项目工作\宁夏出差2018.7.30\baojingchaxun\StatisticalAlarm\StatisticalAlarm.Service\bin\Debug\StatisticalAlarm.Infrastructure.dll
+G:\工作\研二项目工作\宁夏出差2018.7.30\baojingchaxun\StatisticalAlarm\StatisticalAlarm.Service\bin\Debug\StatisticalAlarm.Infrastructure.pdb
+G:\工作\研二项目工作\宁夏出差2018.7.30\baojingchaxun\StatisticalAlarm\StatisticalAlarm.Service\obj\Debug\StatisticalAlarm.Service.csprojResolveAssemblyReference.cache
+G:\工作\研二项目工作\宁夏出差2018.7.30\baojingchaxun\StatisticalAlarm\StatisticalAlarm.Service\obj\Debug\StatisticalAlarm.Service.dll
+G:\工作\研二项目工作\宁夏出差2018.7.30\baojingchaxun\StatisticalAlarm\StatisticalAlarm.Service\obj\Debug\StatisticalAlarm.Service.pdb
